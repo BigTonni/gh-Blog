@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block body %}
+    <div class="container-fluid">
+        {% if posts %}
+            <ul>
+                {% for post in posts %}
+                    <h2><a href="{{ path('post_show', {'id': post.id}) }}">{{ post.title | title }}</a></h2>
+                    {% set postContent = post.content %}
+                    {{ post.content | length > 450 ? post.content | slice(0, 450) ~ '...' : post.content }}
+                    <hr>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+{% endblock %}

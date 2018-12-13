@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {% endblock %}
+
+{% block body %}
+    <div class="container-fluid">
+        <h2>Title: {{ post.title | title }}</h2>
+        <p>Content: {{ post.content }}</p>
+        <h4>Category:
+                {% for category in categories %}
+            <a href="{{ path('posts_in_category_show', {'id': category.id}) }}">
+                {{ category.name }}
+            </a>
+                {% endfor %}
+            </h4>
+        <h4>Published at: {{ post.publishedAt | date("Y-m-d")  }}</h4>
+        <h4>Comments: </h4>
+        {% for comment in post.comments %}
+            <p>
+                {{ comment.content }}
+                {{ comment.publishedAt | date("Y-m-d") }}
+            </p>
+        {% endfor %}
+    </div>
+{% endblock %}
