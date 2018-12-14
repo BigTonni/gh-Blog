@@ -116,7 +116,7 @@ class Post
         return $this->comments;
     }
 
-    public function addComment(Comment $comment): void
+    public function addComment(?Comment $comment): void
     {
         $comment->setPost($this);
         if (!$this->comments->contains($comment)) {

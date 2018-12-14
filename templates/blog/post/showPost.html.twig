@@ -14,6 +14,8 @@
                 {% endfor %}
             </h4>
         <h4>Published at: {{ post.publishedAt | date("Y-m-d")  }}</h4>
+        <h4>Add Comments:</h4>
+        {{ render(controller('App\\Controller\\BlogController::commentForm', {'id': post.id})) }}
         <h4>Comments: </h4>
         {% for comment in post.comments %}
             <p>
