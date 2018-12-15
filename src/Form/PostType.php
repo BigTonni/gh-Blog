@@ -21,8 +21,6 @@ class PostType extends AbstractType
             ->add('content', TextareaType::class)
             ->add('category', EntityType::class, [
                 'class' => Category::class,
-
-                // использует свойство User.username в качестве видимой строки опции
                 'choice_label' => 'name',
                 'multiple' => true,
             ])

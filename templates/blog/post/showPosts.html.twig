@@ -6,7 +6,7 @@
     <div class="container-fluid">
         {% if posts %}
             <ul>
-                {% for post in posts %}
+                {% for post in pagination %}
                     <h2><a href="{{ path('post_show', {'id': post.id}) }}">{{ post.title | title }}</a></h2>
                     {% set postContent = post.content %}
                     {{ post.content | length > 450 ? post.content | slice(0, 450) ~ '...' : post.content }}
@@ -15,4 +15,10 @@
             </ul>
         {% endif %}
     </div>
+
+    {# display navigation #}
+    <div class="navigation">
+        {{ knp_pagination_render(pagination) }}
+    </div>
+
 {% endblock %}

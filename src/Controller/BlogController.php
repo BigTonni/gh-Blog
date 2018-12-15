@@ -7,6 +7,7 @@ use App\Entity\Comment;
 use App\Entity\Post;
 use App\Form\CommentType;
 use App\Form\PostType;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,15 +19,20 @@ class BlogController extends AbstractController
     /**
      * @Route("/", name="posts_show")
      */
-    public function showPosts()
+    public function showPosts(Request $request, PaginatorInterface $paginator)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $posts = $em->getRepository(Post::class)->findAll();
+        $postsRepository = $em->getRepository(Post::class);
+        $posts = $postsRepository->findAll();
+
+        $query = $postsRepository->createQueryBuilder('p')->getQuery();
+        $pagination = $paginator->paginate($query, $request->query->getInt('page', 1));
 
         return $this->render('blog/post/showPosts.html.twig', [
-            'posts' => $posts,
             'title' => 'Show Posts',
+            'posts' => $posts,
+            'pagination' => $pagination,
         ]);
     }
 
@@ -49,17 +55,21 @@ class BlogController extends AbstractController
     /**
      * @Route("/category/{id}", name="posts_in_category_show", requirements={"page"="\d+"})
      */
-    public function showPostInCategory($id)
+    public function showPostsInCategory(Request $request, PaginatorInterface $paginator, $id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $category = $em->getRepository(Category::class)->find($id);
+        $categoryRepository = $em->getRepository(Category::class);
 
+        $category = $categoryRepository->find($id);
         $posts = $category->getPosts();
+
+        $pagination = $paginator->paginate($posts, $request->query->getInt('page', 1));
 
         return $this->render('blog/post/showPosts.html.twig', [
             'posts' => $posts,
             'title' => 'Show Post in Category '.$category->getName(),
+            'pagination' => $pagination,
         ]);
     }
 
