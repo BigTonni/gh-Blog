@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CategoryRepository")
@@ -20,17 +21,20 @@ class Category
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
+     * @Assert\NotBlank()
+     *
      */
     private $name;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Post", mappedBy="category")
+     * @Assert\NotNull()
      */
-    private $post;
+    private $posts;
 
     public function __construct()
     {
-        $this->post = new ArrayCollection();
+        $this->posts = new ArrayCollection();
     }
 
     /**
@@ -38,7 +42,7 @@ class Category
      */
     public function getPosts()
     {
-        return $this->post;
+        return $this->posts;
     }
 
     public function getId(): ?int

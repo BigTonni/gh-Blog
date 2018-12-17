@@ -4,7 +4,7 @@
 
 {% block body %}
     <div class="container-fluid">
-        {% if posts %}
+        {% if pagination %}
             <ul>
                 {% for post in pagination %}
                     <h2><a href="{{ path('post_show', {'id': post.id}) }}">{{ post.title | title }}</a></h2>

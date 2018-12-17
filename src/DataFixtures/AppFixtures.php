@@ -114,7 +114,7 @@ class AppFixtures extends Fixture
             $category = new Category();
             $category->setName($name);
             $manager->persist($category);
-            $this->addReference('category-'.$name, $category);
+            $this->addReference('category-' . $name, $category);
         }
         $manager->flush();
     }
@@ -141,7 +141,7 @@ class AppFixtures extends Fixture
         $selectedCategory = \array_slice($categoryNames, 0, random_int(2, 4));
 
         return array_map(function ($categoryName) {
-            return $this->getReference('category-'.$categoryName);
+            return $this->getReference('category-' . $categoryName);
         }, $selectedCategory);
     }
 
@@ -152,7 +152,7 @@ class AppFixtures extends Fixture
             $posts[] = [
                 $title,
                 $this->getPostContent(),
-                new \DateTime('now - '.$i.'days'),
+                new \DateTime('now - ' . $i . 'days'),
                 $this->getRandomCategory(),
             ];
         }
@@ -164,7 +164,7 @@ class AppFixtures extends Fixture
     {
         $phrases = $this->getComment();
         shuffle($phrases);
-        while (mb_strlen($text = implode('. ', $phrases).'.') > $maxLength) {
+        while (mb_strlen($text = implode('. ', $phrases) . '.') > $maxLength) {
             array_pop($phrases);
         }
 

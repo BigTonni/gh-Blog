@@ -23,15 +23,11 @@ class BlogController extends AbstractController
     {
         $em = $this->getDoctrine()->getManager();
 
-        $postsRepository = $em->getRepository(Post::class);
-        $posts = $postsRepository->findAll();
-
-        $query = $postsRepository->createQueryBuilder('p')->getQuery();
+        $query = $em->getRepository(Post::class)->createQueryBuilder('p')->getQuery();
         $pagination = $paginator->paginate($query, $request->query->getInt('page', 1));
 
-        return $this->render('blog/post/showPosts.html.twig', [
+        return $this->render('blog/post/show_posts.html.twig', [
             'title' => 'Show Posts',
-            'posts' => $posts,
             'pagination' => $pagination,
         ]);
     }
@@ -46,7 +42,7 @@ class BlogController extends AbstractController
         $post = $em->getRepository(Post::class)->find($id);
         $categories = $post->getCategory();
 
-        return $this->render('blog/post/showPost.html.twig', [
+        return $this->render('blog/post/show_post.html.twig', [
             'post' => $post,
             'categories' => $categories,
         ]);
@@ -59,16 +55,12 @@ class BlogController extends AbstractController
     {
         $em = $this->getDoctrine()->getManager();
 
-        $categoryRepository = $em->getRepository(Category::class);
+        $category = $em->getRepository(Category::class)->find($id);
 
-        $category = $categoryRepository->find($id);
-        $posts = $category->getPosts();
+        $pagination = $paginator->paginate($category->getPosts(), $request->query->getInt('page', 1));
 
-        $pagination = $paginator->paginate($posts, $request->query->getInt('page', 1));
-
-        return $this->render('blog/post/showPosts.html.twig', [
-            'posts' => $posts,
-            'title' => 'Show Post in Category '.$category->getName(),
+        return $this->render('blog/post/show_posts.html.twig', [
+            'title' => 'Show Post in Category ' . $category->getName(),
             'pagination' => $pagination,
         ]);
     }
@@ -92,15 +84,11 @@ class BlogController extends AbstractController
             $em->persist($post);
             $em->flush();
 
-            $link = $this->generateUrl('post_show', [
-                'id' => $post->getId(),
-            ]);
-
-            return $this->redirect($link);
+            return $this->redirectToRoute('post_show', ['id' => $post->getId()]);
         }
 
-        return $this->render('blog/post/createPost.html.twig', [
-            'createPost_form' => $form->createView(),
+        return $this->render('blog/post/create_post.html.twig', [
+            'form' => $form->createView(),
             'title' => 'Create New Post',
         ]);
     }
@@ -126,8 +114,8 @@ class BlogController extends AbstractController
             return $this->redirectToRoute('post_show', ['id' => $post->getId()]);
         }
 
-        return $this->render('blog/comment/createComment.html.twig', [
-            'createComment_form' => $form->createView(),
+        return $this->render('blog/comment/create_comment.html.twig', [
+            'form' => $form->createView(),
             'title' => 'Create New Comment',
         ]);
     }
@@ -136,9 +124,9 @@ class BlogController extends AbstractController
     {
         $form = $this->createForm(CommentType::class);
 
-        return $this->render('blog/comment/createComment.html.twig', [
+        return $this->render('blog/comment/create_comment.html.twig', [
             'post' => $post,
-            'createComment_form' => $form->createView(),
+            'form' => $form->createView(),
         ]);
     }
 }
