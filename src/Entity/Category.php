@@ -27,7 +27,7 @@ class Category
     private $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Post", mappedBy="category")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Post", mappedBy="category")
      * @ORM\JoinColumn(name="post_id", referencedColumnName="id")
      */
     private $posts;
