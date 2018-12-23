@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Validator\Constraints as Assert;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CategoryRepository")
@@ -22,15 +23,21 @@ class Category
     /**
      * @ORM\Column(type="string", length=255, unique=true)
      * @Assert\NotBlank()
-     *
      */
     private $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Post", mappedBy="category")
-     * @Assert\NotNull()
+     * @ORM\ManyToMany(targetEntity="Post", mappedBy="category")
+     * @ORM\JoinColumn(name="post_id", referencedColumnName="id")
      */
     private $posts;
+
+    /**
+     * @Gedmo\Slug(fields={"name"})
+     * @ORM\Column(type="string", unique=true)
+     * @Gedmo\Blameable(field="name", on="update")
+     */
+    private $slug;
 
     public function __construct()
     {
@@ -43,6 +50,13 @@ class Category
     public function getPosts()
     {
         return $this->posts;
+    }
+
+    public function setPosts($posts): self
+    {
+        $this->posts = $posts;
+
+        return $this;
     }
 
     public function getId(): ?int
@@ -58,6 +72,18 @@ class Category
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getSlug(): string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug($slug): self
+    {
+        $this->slug = $slug;
 
         return $this;
     }

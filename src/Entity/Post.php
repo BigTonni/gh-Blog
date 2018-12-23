@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Validator\Constraints as Assert;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PostRepository")
@@ -20,6 +21,18 @@ class Post
     private $id;
 
     /**
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(type="datetime")
+     */
+    private $createdAt;
+
+    /**
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(type="datetime")
+     */
+    private $updatedAt;
+
+    /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      */
@@ -32,16 +45,15 @@ class Post
     private $content;
 
     /**
-     * @ORM\Column(type="datetime")
-     * @Assert\DateTime()
-     * @var string A "Y-m-d H:i:s" formatted value
+     * @ORM\Column(type="boolean")
+     * @Assert\NotNull()
      */
-    private $publishedAt;
+    private $isPublished;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Category", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="App\Entity\Category", inversedBy="posts")
      * @ORM\JoinColumn(nullable=true)
-     * @Assert\NotNull()
+     * @Assert\Valid()
      */
     private $category;
 
@@ -52,10 +64,29 @@ class Post
      */
     private $comments;
 
+    /**
+     * @Gedmo\Slug(fields={"title"})
+     * @ORM\Column(type="string", unique=true)
+     */
+    private $slug;
+
     public function __construct()
     {
+        $this->isPublished = true;
         $this->category = new ArrayCollection();
         $this->comments = new ArrayCollection();
+    }
+
+    public function getSlug(): string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug($slug): self
+    {
+        $this->slug = $slug;
+
+        return $this;
     }
 
     public function addCategory(?Category ...$categories): void
@@ -106,14 +137,38 @@ class Post
         return $this;
     }
 
-    public function getPublishedAt(): ?\DateTime
+    public function getisPublished(): bool
     {
-        return $this->publishedAt;
+        return $this->isPublished;
     }
 
-    public function setPublishedAt($publishedAt): self
+    public function setIsPublished(bool $isPublished): self
     {
-        $this->publishedAt = $publishedAt;
+        $this->isPublished = $isPublished;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): \DateTime
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTime $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): \DateTime
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTime $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }
