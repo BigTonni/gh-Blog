@@ -24,7 +24,6 @@ class MenuBuilder
         $menu->addChild('Home', ['route' => 'posts_show']);
         $menu->addChild('Create Post', ['route' => 'post_create']);
 
-
         return $menu;
     }
 }

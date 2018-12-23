@@ -8,12 +8,12 @@
         <p>Content: {{ post.content }}</p>
         <h4>Category:
             {% for category in categories %}
-                <a href="{{ path('posts_in_category_show', {'id': category.id}) }}">
+                <a href="{{ path('posts_in_category_show', {'slug': category.slug}) }}">
                     {{ category.name }}
                 </a>
             {% endfor %}
         </h4>
-        <h4>Published at: {{ post.publishedAt | date("Y-m-d") }}</h4>
+        <h4>Created at: {{ post.createdAt | date("Y-m-d") }}</h4>
         <h4>Add Comments:</h4>
         {{ render(controller('App\\Controller\\BlogController::commentForm', {'id': post.id})) }}
         <h4>Comments: </h4>
