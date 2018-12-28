@@ -21,8 +21,15 @@ class MenuBuilder
     {
         $menu = $this->factory->createItem('root');
 
-        $menu->addChild('Home', ['route' => 'posts_show']);
-        $menu->addChild('Create Post', ['route' => 'post_create']);
+        $menu->setChildrenAttribute('class', 'nav');
+        $menu->addChild('Home', ['route' => 'home'])
+            ->setAttributes([
+            'class' => 'nav-item', ]
+            );
+        $menu->addChild('Create Post', ['route' => 'post_create'])
+            ->setAttributes([
+                    'class' => 'nav-item', ]
+            );
 
         return $menu;
     }

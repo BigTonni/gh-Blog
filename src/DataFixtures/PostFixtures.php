@@ -20,7 +20,7 @@ class PostFixtures extends Fixture
             $post = new Post();
             $post->setTitle($title);
             $post->setContent($content);
-            $post->addCategory(...$category);
+            $post->setCategory($category);
 
             foreach (range(1, 3) as $i) {
                 $comment = new Comment();
@@ -117,16 +117,15 @@ class PostFixtures extends Fixture
         return $postContent[$randKey];
     }
 
-    private function getRandomCategory(): array
+    private function getRandomCategory()
     {
         $category = new CategoryFixtures();
         $categoryNames = $category->getCategory();
-        shuffle($categoryNames);
-        $chosenCategory = \array_slice($categoryNames, 0, random_int(2, 4));
 
-        return array_map(function ($categoryName) {
-            return $this->getReference('category-'.$categoryName);
-        }, $chosenCategory);
+        $randKey = array_rand($categoryNames);
+        $categoryName = $categoryNames[$randKey];
+
+        return $this->getReference('category-'.$categoryName);
     }
 
     private function getRandomComment(int $maxLength = 255): string

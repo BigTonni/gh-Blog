@@ -23,12 +23,15 @@ class Category
     /**
      * @ORM\Column(type="string", length=255, unique=true)
      * @Assert\NotBlank()
+     * @Assert\Length(
+     *     min="2",
+     *     max="255"
+     * )
      */
     private $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Post", mappedBy="category")
-     * @ORM\JoinColumn(name="post_id", referencedColumnName="id")
+     * @ORM\OneToMany(targetEntity="App\Entity\Post", mappedBy="category")
      */
     private $posts;
 

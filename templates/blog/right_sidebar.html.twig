@@ -1,0 +1,24 @@
+{% block right_sidebar %}
+    <div class="span4 sidebar">
+        <!--Search-->
+        <section>
+            <div class="input-append">
+                <form action="#">
+                    <input id="appendedInputButton" size="16" type="text" placeholder="Search">
+                    <button class="btn" type="button"><i class="icon-search"></i></button>
+                </form>
+            </div>
+        </section>
+
+        <!--Categories-->
+        <h5 class="title-bg">Categories</h5>
+        <ul class="post-category-list">
+            {% if categories %}
+                {% for category in categories %}
+                    <li><a href="{{ path('posts_in_category_show', {'slug': category.slug}) }}"><i
+                                    class="icon-plus-sign"></i>{{ category.name }}</a></li>
+                {% endfor %}
+            {% endif %}
+        </ul>
+    </div>
+{% endblock %}
