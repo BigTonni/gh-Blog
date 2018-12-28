@@ -14,8 +14,12 @@ class CommentType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('content', TextareaType::class)
-            ->add('send', SubmitType::class)
+            ->add('content', TextareaType::class, [
+                'attr' => ['class' => 'span6'],
+            ])
+            ->add('Post My Comment', SubmitType::class, [
+                'attr' => ['class' => 'btn btn-inverse'],
+            ])
         ;
     }
 

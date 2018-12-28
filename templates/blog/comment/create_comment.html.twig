@@ -1,8 +1,9 @@
-{{ form_start(form, {method: 'POST', action: path('comment_create', {'id': post.id})}) }}
+{{ form_start(form, {method: 'POST', action: path('comment_create', {'slug': post.slug})}) }}
 
-<fieldset>
-    <div class="form-group">
-        {{ form_widget(form) }}
-    </div>
-</fieldset>
+<!-- Comment Form -->
+<div class="comment-form-container">
+    <h6>Leave a Comment</h6>
+    {{ form_widget(form) }}
+</div>
+
 {{ form_end(form) }}

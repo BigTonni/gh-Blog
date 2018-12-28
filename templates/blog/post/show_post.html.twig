@@ -3,25 +3,72 @@
 {% block title %} {% endblock %}
 
 {% block body %}
-    <div class="container-fluid">
-        <h2>Title: {{ post.title | title }}</h2>
-        <p>Content: {{ post.content }}</p>
-        <h4>Category:
-            {% for category in categories %}
-                <a href="{{ path('posts_in_category_show', {'slug': category.slug}) }}">
-                    {{ category.name }}
-                </a>
-            {% endfor %}
-        </h4>
-        <h4>Created at: {{ post.createdAt | date("Y-m-d") }}</h4>
-        <h4>Add Comments:</h4>
-        {{ render(controller('App\\Controller\\BlogController::commentForm', {'id': post.id})) }}
-        <h4>Comments: </h4>
-        {% for comment in post.comments %}
-            <p>
-                {{ comment.content }}
-                {{ comment.publishedAt | date("Y-m-d") }}
-            </p>
-        {% endfor %}
+    <!-- Blog Content
+       ================================================== -->
+    <div class="row"><!--Container row-->
+
+        <!-- Blog Full Post
+        ================================================== -->
+        <div class="span8 blog">
+
+            <!-- Blog Post 1 -->
+            <article>
+                <h3 class="title-bg">{{ post.title | title }}</h3>
+                <div class="post-content">
+                    <a href="#"><img src="{{ asset('src/img/gallery/post-img-2.jpg') }}" alt="Post Thumb"></a>
+
+                    <div class="post-body">
+                        <p>
+                            {{ post.content }}
+                        </p>
+                    </div>
+
+                    <div class="post-summary-footer">
+                        <ul class="post-data">
+                            <li><i class="icon-calendar"></i>{{ post.createdAt | date('Y-m-d') }}</li>
+                            <li><i class="icon-user"></i> <a href="#">Admin</a></li>
+                            <li><i class="icon-comment"></i> {{ countComment.commentCount }} Comments</li>
+                            <li><a href="{{ path('posts_in_category_show', {'slug': category.slug}) }}"><i
+                                            class="icon-plus-sign"></i>{{ category.name }}</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Post Comments
+            ================================================== -->
+            <section class="comments">
+                <h4 class="title-bg"><a name="comments"></a>{{ countComment.commentCount }} Comments so far</h4>
+                <ul>
+                    {% for comment in post.comments %}
+                        <p>
+                        <li>
+                            <img src="{{ asset('src/img/user-avatar.jpg') }}" alt="Image"/>
+                            <span class="comment-name">John Doe</span>
+                            <span class="comment-date">{{ comment.publishedAt | date('Y-m-d') }}</span>
+                            <div class="comment-content">{{ comment.content }}</div>
+                        </li>
+                        </p>
+                    {% endfor %}
+
+                </ul>
+
+                <!-- Comment Form -->
+                {% block commentForm %}
+                    {{ render(controller('App\\Controller\\BlogController::commentForm', {'id': post.id})) }}
+                {% endblock %}
+
+            </section><!-- Close comments section-->
+
+        </div><!--Close container row-->
+
+        <!-- Blog Sidebar
+        ================================================== -->
+        {% block right_sidebar %}
+            {{ render(controller('App\\Controller\\BlogController::rightSidebar')) }}
+        {% endblock %}
     </div>
+
+    </div> <!-- End Container -->
+
 {% endblock %}

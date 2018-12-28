@@ -23,24 +23,33 @@ class Post
     /**
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
+     * @Assert\DateTime()
      */
     private $createdAt;
 
     /**
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime")
+     * @Assert\DateTime()
      */
     private $updatedAt;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
+     * @Assert\Length(
+     *     min="2",
+     *     max="255"
+     * )
      */
     private $title;
 
     /**
      * @ORM\Column(type="text")
      * @Assert\NotBlank()
+     * @Assert\Length(
+     *     min = 2
+     * )
      */
     private $content;
 
@@ -51,9 +60,8 @@ class Post
     private $isPublished;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Category", inversedBy="posts")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="posts")
      * @ORM\JoinColumn(nullable=true)
-     * @Assert\Valid()
      */
     private $category;
 
@@ -73,7 +81,6 @@ class Post
     public function __construct()
     {
         $this->isPublished = true;
-        $this->category = new ArrayCollection();
         $this->comments = new ArrayCollection();
     }
 
@@ -89,23 +96,16 @@ class Post
         return $this;
     }
 
-    public function addCategory(?Category ...$categories): void
-    {
-        foreach ($categories as $category) {
-            if (!$this->category->contains($category)) {
-                $this->category->add($category);
-            }
-        }
-    }
-
-    public function removeCategory(Category $category): void
-    {
-        $this->category->removeElement($category);
-    }
-
-    public function getCategory(): Collection
+    public function getCategory()
     {
         return $this->category;
+    }
+
+    public function setCategory($category): self
+    {
+        $this->category = $category;
+
+        return $this;
     }
 
     public function getId(): ?int

@@ -9,7 +9,6 @@ use App\Form\CommentType;
 use App\Form\PostType;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,16 +16,16 @@ use Symfony\Component\Routing\Annotation\Route;
 class BlogController extends AbstractController
 {
     /**
-     * @Route("/", name="posts_show")
+     * @Route("/", name="home")
      */
-    public function showPosts(Request $request, PaginatorInterface $paginator)
+    public function home(Request $request, PaginatorInterface $paginator)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $query = $em->getRepository(Post::class)->createQueryBuilder('p')->getQuery();
-        $posts = $paginator->paginate($query, $request->query->getInt('page', 1));
+        $postsQuery = $em->getRepository(Post::class)->createQueryBuilder('p')->getQuery();
+        $posts = $paginator->paginate($postsQuery, $request->query->getInt('page', 1));
 
-        return $this->render('blog/post/show_posts.html.twig', [
+        return $this->render('blog/home.twig', [
             'title' => 'Show Posts',
             'posts' => $posts,
         ]);
@@ -37,11 +36,15 @@ class BlogController extends AbstractController
      */
     public function showPost(Post $post)
     {
-        $categories = $post->getCategory();
+        $category = $post->getCategory();
+
+        $em = $this->getDoctrine()->getManager();
+        $countComment = $em->getRepository(Comment::class)->getCountCommentForPost($post->getId());
 
         return $this->render('blog/post/show_post.html.twig', [
             'post' => $post,
-            'categories' => $categories,
+            'category' => $category,
+            'countComment' => $countComment,
         ]);
     }
 
@@ -50,11 +53,16 @@ class BlogController extends AbstractController
      */
     public function showPostsInCategory(Request $request, PaginatorInterface $paginator, Category $category)
     {
-        $posts = $paginator->paginate($category->getPosts(), $request->query->getInt('page', 1));
+        $em = $this->getDoctrine()->getManager();
+        $query = $em->getRepository(Post::class)->findPostsByCategoryId($category->getId());
 
-        return $this->render('blog/post/show_posts.html.twig', [
-            'title' => 'Show Post in Category '.$category->getName(),
+        $posts = $paginator->paginate($query, $request->query->getInt('page', 1));
+        $categories = $em->getRepository(Category::class)->findAll();
+
+        return $this->render('blog/home.twig', [
+            'title' => 'Show Post in Category ' . $category->getName(),
             'posts' => $posts,
+            'categories' => $categories,
         ]);
     }
 
@@ -86,8 +94,7 @@ class BlogController extends AbstractController
     }
 
     /**
-     * @Route("/comment/{id}/new", methods={"POST"}, name="comment_create")
-     * @ParamConverter("id", class="App\Entity\Post")
+     * @Route("/comment/{slug}/new", methods={"POST"}, name="comment_create")
      */
     public function createComment(Request $request, Post $post): Response
     {
@@ -119,6 +126,17 @@ class BlogController extends AbstractController
         return $this->render('blog/comment/create_comment.html.twig', [
             'post' => $post,
             'form' => $form->createView(),
+        ]);
+    }
+
+    public function rightSidebar()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $categories = $em->getRepository(Category::class)->findAll();
+
+        return $this->render('blog/right_sidebar.html.twig', [
+            'categories' => $categories,
         ]);
     }
 }
