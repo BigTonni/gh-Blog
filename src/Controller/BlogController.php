@@ -117,8 +117,9 @@ class BlogController extends AbstractController
      */
     public function createComment(Request $request, Post $post): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         $comment = new Comment();
-        $comment->setPublishedAt(new \DateTime());
         $post->addComment($comment);
 
         $form = $this->createForm(CommentType::class, $comment);
@@ -135,16 +136,7 @@ class BlogController extends AbstractController
         return $this->render('blog/comment/create_comment.html.twig', [
             'form' => $form->createView(),
             'title' => 'Create New Comment',
-        ]);
-    }
-
-    public function commentForm(Post $post): Response
-    {
-        $form = $this->createForm(CommentType::class);
-
-        return $this->render('blog/comment/create_comment.html.twig', [
             'post' => $post,
-            'form' => $form->createView(),
         ]);
     }
 

@@ -54,9 +54,11 @@
                 </ul>
 
                 <!-- Comment Form -->
-                {% block commentForm %}
-                    {{ render(controller('App\\Controller\\BlogController::commentForm', {'id': post.id})) }}
-                {% endblock %}
+                {% if is_granted('ROLE_USER') %}
+                    {% block commentForm %}
+                        {{ render(controller('App\\Controller\\BlogController::createComment', {'id': post.id})) }}
+                    {% endblock %}
+                {% endif %}
 
             </section><!-- Close comments section-->
 

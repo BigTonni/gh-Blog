@@ -3,12 +3,14 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
  */
 class User implements UserInterface
 {
@@ -32,14 +34,28 @@ class User implements UserInterface
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+     * @Assert\Length(
+     *     min="6",
+     *     minMessage="Your password should be at least {{ limit }} characters",
+     *     max="4096"
+     * )
      */
     private $password;
 
     /**
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *     min="6",
+     *     minMessage="Your password should be at least {{ limit }} characters",
+     *     max="4096"
+     * )
+     */
+    private $plainPassword;
+
+    /**
      * @var string
      *
-     * @ORM\Column(type="string")
-     * @Assert\NotBlank()
+     * @ORM\Column(type="string", nullable=true)
      * @Assert\Length(min="2")
      */
     private $fullName;
@@ -49,6 +65,11 @@ class User implements UserInterface
      * @ORM\Column(type="string", unique=true)
      */
     private $slug;
+
+    public function __construct()
+    {
+        $this->roles = ['ROLE_USER'];
+    }
 
     public function getId(): ?int
     {
@@ -76,7 +97,7 @@ class User implements UserInterface
 
     public function getFullName(): string
     {
-        return $this->fullName;
+        return (string) $this->fullName;
     }
 
     public function getEmail(): ?string
@@ -131,6 +152,18 @@ class User implements UserInterface
     public function setPassword(string $password): self
     {
         $this->password = $password;
+
+        return $this;
+    }
+
+    public function getPlainPassword()
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword($password): self
+    {
+        $this->plainPassword = $password;
 
         return $this;
     }
