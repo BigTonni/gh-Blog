@@ -177,4 +177,15 @@ class BlogController extends AbstractController
             'categories' => $categories,
         ]);
     }
+
+    public function rightSidebar()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $categories = $em->getRepository(Category::class)->findAll();
+
+        return $this->render('blog/right_sidebar.html.twig', [
+            'categories' => $categories,
+        ]);
+    }
 }

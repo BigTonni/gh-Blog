@@ -92,7 +92,7 @@ class PostFixtures extends Fixture implements OrderedFixtureInterface
         ];
     }
 
-    public function getOrder()
+  public function getOrder()
     {
         return 3;
     }
