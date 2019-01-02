@@ -90,7 +90,8 @@ class BlogController extends AbstractController
      */
     public function createPost(Request $request)
     {
-        $post = new Post();
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        $post = new Post($this->getUser());
 
         $form = $this->createForm(PostType::class, $post, [
             'action' => $this->generateUrl('post_create'),
@@ -121,6 +122,7 @@ class BlogController extends AbstractController
 
         $comment = new Comment();
         $post->addComment($comment);
+        $comment->setAuthor($this->getUser());
 
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);

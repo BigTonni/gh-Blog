@@ -30,10 +30,6 @@ class MenuBuilder
         $menu->setChildrenAttribute('class', 'nav');
         $menu->addChild('Home', ['route' => 'home'])
             ->setAttributes([
-            'class' => 'nav-item', ]
-            );
-        $menu->addChild('Create Post', ['route' => 'post_create'])
-            ->setAttributes([
                     'class' => 'nav-item', ]
             );
 
@@ -47,6 +43,12 @@ class MenuBuilder
                         'class' => 'nav-item', ]
                 );
         } else {
+            if ($this->checker->isGranted('ROLE_ADMIN')) {
+                $menu->addChild('Create Post', ['route' => 'post_create'])
+                    ->setAttributes([
+                            'class' => 'nav-item', ]
+                    );
+            }
             $menu->addChild('Logout', ['route' => 'app_logout'])
                 ->setAttributes([
                         'class' => 'nav-item', ]

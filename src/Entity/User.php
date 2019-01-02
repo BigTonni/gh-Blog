@@ -56,6 +56,7 @@ class User implements UserInterface
      * @var string
      *
      * @ORM\Column(type="string", nullable=true)
+     * @Assert\NotBlank()
      * @Assert\Length(min="2")
      */
     private $fullName;
