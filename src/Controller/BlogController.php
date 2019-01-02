@@ -114,6 +114,31 @@ class BlogController extends AbstractController
     }
 
     /**
+     * @Route("post/edit/{slug}", name="post_edit", methods={"GET","POST"})
+     */
+    public function edit(Request $request, Post $post): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+        if ($post->getAuthor() !== $this->getUser()) {
+            return $this->redirectToRoute('home');
+        }
+        $form = $this->createForm(PostType::class, $post);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('post_show', ['slug' => $post->getSlug()]);
+        }
+
+        return $this->render('blog/post/edit_post.html.twig', [
+            'post' => $post,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
      * @Route("/comment/{slug}/new", methods={"POST"}, name="comment_create")
      */
     public function createComment(Request $request, Post $post): Response

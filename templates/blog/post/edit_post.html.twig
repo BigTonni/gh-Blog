@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {% endblock %}
+
+{% block body %}
+    <!-- Blog Content
+       ================================================== -->
+    <div class="row"><!--Container row-->
+
+        <!-- Blog Full Post
+        ================================================== -->
+        <div class="span8 blog">
+
+            <!-- Blog Post 1 -->
+            <article>
+                <div class="post-content">
+                    {{ include('blog/post/_form.html.twig', {'button_label': 'Update'}) }}
+                </div>
+            </article>
+
+        </div><!--Close container row-->
+
+        <!-- Blog Sidebar
+        ================================================== -->
+        {% block right_sidebar %}
+            {{ render(controller('App\\Controller\\BlogController::rightSidebar')) }}
+        {% endblock %}
+    </div>
+
+    </div> <!-- End Container -->
+
+{% endblock %}
