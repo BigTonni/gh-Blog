@@ -44,7 +44,7 @@
                         <p>
                         <li>
                             <img src="{{ asset('src/img/user-avatar.jpg') }}" alt="Image"/>
-                            <span class="comment-name">John Doe</span>
+                            <span class="comment-name">{{ post.author.fullName }}</span>
                             <span class="comment-date">{{ comment.publishedAt | date('Y-m-d') }}</span>
                             <div class="comment-content">{{ comment.content }}</div>
                         </li>

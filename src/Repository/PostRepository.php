@@ -27,4 +27,13 @@ class PostRepository extends ServiceEntityRepository
             ->setParameter(':id', $id)
             ->getQuery();
     }
+
+    public function findPostsByAuthorId($id)
+    {
+        return $this->createQueryBuilder('p')
+            ->innerJoin('p.author', 'u')
+            ->where('u.id IN (:id)')
+            ->setParameter(':id', $id)
+            ->getQuery();
+    }
 }

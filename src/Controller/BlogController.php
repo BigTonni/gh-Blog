@@ -12,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Entity\User;
 
 class BlogController extends AbstractController
 {
@@ -60,7 +61,25 @@ class BlogController extends AbstractController
         $categories = $em->getRepository(Category::class)->findAll();
 
         return $this->render('blog/home.twig', [
-            'title' => 'Show Post in Category ' . $category->getName(),
+            'title' => 'Show Post in Category '.$category->getName(),
+            'posts' => $posts,
+            'categories' => $categories,
+        ]);
+    }
+
+    /**
+     * @Route("/post/author/{slug}", name="author_posts_show")
+     */
+    public function showAuthorPosts(Request $request, PaginatorInterface $paginator, User $user)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $query = $em->getRepository(Post::class)->findPostsByAuthorId($user->getId());
+
+        $posts = $paginator->paginate($query, $request->query->getInt('page', 1));
+        $categories = $em->getRepository(Category::class)->findAll();
+
+        return $this->render('blog/home.twig', [
+            'title' => 'View author posts '.$user->getFullName(),
             'posts' => $posts,
             'categories' => $categories,
         ]);

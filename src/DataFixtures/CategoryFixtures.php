@@ -4,9 +4,10 @@ namespace App\DataFixtures;
 
 use App\Entity\Category;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
-class CategoryFixtures extends Fixture
+class CategoryFixtures extends Fixture implements OrderedFixtureInterface
 {
     public function load(ObjectManager $manager)
     {
@@ -27,7 +28,8 @@ class CategoryFixtures extends Fixture
     public function getCategory(): array
     {
         return [
-            'All publications',
+            'Test category 1',
+            'Test category 2',
             'CMS',
             'IT news',
             'Analytics',
@@ -37,5 +39,10 @@ class CategoryFixtures extends Fixture
             'Website promotion',
             'Website Development',
         ];
+    }
+
+    public function getOrder()
+    {
+        return 2;
     }
 }
