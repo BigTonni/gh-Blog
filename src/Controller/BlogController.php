@@ -12,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Entity\User;
 
 class BlogController extends AbstractController
 {
@@ -60,7 +61,25 @@ class BlogController extends AbstractController
         $categories = $em->getRepository(Category::class)->findAll();
 
         return $this->render('blog/home.twig', [
-            'title' => 'Show Post in Category ' . $category->getName(),
+            'title' => 'Show Post in Category '.$category->getName(),
+            'posts' => $posts,
+            'categories' => $categories,
+        ]);
+    }
+
+    /**
+     * @Route("/post/author/{slug}", name="author_posts_show")
+     */
+    public function showAuthorPosts(Request $request, PaginatorInterface $paginator, User $user)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $query = $em->getRepository(Post::class)->findPostsByAuthorId($user->getId());
+
+        $posts = $paginator->paginate($query, $request->query->getInt('page', 1));
+        $categories = $em->getRepository(Category::class)->findAll();
+
+        return $this->render('blog/home.twig', [
+            'title' => 'View author posts '.$user->getFullName(),
             'posts' => $posts,
             'categories' => $categories,
         ]);
@@ -71,7 +90,8 @@ class BlogController extends AbstractController
      */
     public function createPost(Request $request)
     {
-        $post = new Post();
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        $post = new Post($this->getUser());
 
         $form = $this->createForm(PostType::class, $post, [
             'action' => $this->generateUrl('post_create'),
@@ -94,13 +114,40 @@ class BlogController extends AbstractController
     }
 
     /**
+     * @Route("post/edit/{slug}", name="post_edit", methods={"GET","POST"})
+     */
+    public function edit(Request $request, Post $post): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+        if ($post->getAuthor() !== $this->getUser()) {
+            return $this->redirectToRoute('home');
+        }
+        $form = $this->createForm(PostType::class, $post);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('post_show', ['slug' => $post->getSlug()]);
+        }
+
+        return $this->render('blog/post/edit_post.html.twig', [
+            'post' => $post,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
      * @Route("/comment/{slug}/new", methods={"POST"}, name="comment_create")
      */
     public function createComment(Request $request, Post $post): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         $comment = new Comment();
-        $comment->setPublishedAt(new \DateTime());
         $post->addComment($comment);
+        $comment->setAuthor($this->getUser());
 
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
@@ -116,16 +163,7 @@ class BlogController extends AbstractController
         return $this->render('blog/comment/create_comment.html.twig', [
             'form' => $form->createView(),
             'title' => 'Create New Comment',
-        ]);
-    }
-
-    public function commentForm(Post $post): Response
-    {
-        $form = $this->createForm(CommentType::class);
-
-        return $this->render('blog/comment/create_comment.html.twig', [
             'post' => $post,
-            'form' => $form->createView(),
         ]);
     }
 

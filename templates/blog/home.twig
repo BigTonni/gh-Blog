@@ -26,7 +26,7 @@
                     <button class="btn btn-small btn-inverse" type="button" onclick="location.href='{{ path('post_show', {'slug': post.slug}) }}'">Read more</button>
                     <ul class="post-data">
                         <li><i class="icon-calendar"></i>{{ post.createdAt | date('Y-m-d') }}</li>
-                        <li><i class="icon-user"></i> <a href="#">Admin</a></li>
+                        <li><i class="icon-user"></i> <a href="{{ path('author_posts_show', {'slug': post.author.slug}) }}">{{ post.author.fullname | title }}</a></li>
                         <li><a href="{{ path('posts_in_category_show', {'slug': post.category.slug}) }}"><i class="icon-plus-sign"></i>{{ post.category.name }}</a></li>
                     </ul>
                 </div>

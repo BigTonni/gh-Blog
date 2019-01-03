@@ -26,7 +26,7 @@
                     <div class="post-summary-footer">
                         <ul class="post-data">
                             <li><i class="icon-calendar"></i>{{ post.createdAt | date('Y-m-d') }}</li>
-                            <li><i class="icon-user"></i> <a href="#">Admin</a></li>
+                            <li><i class="icon-user"></i> <a href="{{ path('author_posts_show', {'slug': post.author.slug}) }}">{{ post.author.fullname | title }}</a></li>
                             <li><i class="icon-comment"></i> {{ countComment.commentCount }} Comments</li>
                             <li><a href="{{ path('posts_in_category_show', {'slug': category.slug}) }}"><i
                                             class="icon-plus-sign"></i>{{ category.name }}</a></li>
@@ -44,7 +44,7 @@
                         <p>
                         <li>
                             <img src="{{ asset('src/img/user-avatar.jpg') }}" alt="Image"/>
-                            <span class="comment-name">John Doe</span>
+                            <span class="comment-name">{{ comment.author.fullName }}</span>
                             <span class="comment-date">{{ comment.publishedAt | date('Y-m-d') }}</span>
                             <div class="comment-content">{{ comment.content }}</div>
                         </li>
@@ -54,9 +54,11 @@
                 </ul>
 
                 <!-- Comment Form -->
-                {% block commentForm %}
-                    {{ render(controller('App\\Controller\\BlogController::commentForm', {'id': post.id})) }}
-                {% endblock %}
+                {% if is_granted('ROLE_USER') %}
+                    {% block commentForm %}
+                        {{ render(controller('App\\Controller\\BlogController::createComment', {'id': post.id})) }}
+                    {% endblock %}
+                {% endif %}
 
             </section><!-- Close comments section-->
 
