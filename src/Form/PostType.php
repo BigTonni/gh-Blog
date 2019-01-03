@@ -17,11 +17,16 @@ class PostType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title', TextType::class)
-            ->add('content', TextareaType::class)
+            ->add('title', TextType::class, [
+                'attr' => ['class' => 'span6'],
+            ])
+            ->add('content', TextareaType::class, [
+                'attr' => ['class' => 'span6'],
+            ])
             ->add('category', EntityType::class, [
                 'class' => Category::class,
                 'choice_label' => 'name',
+                'attr' => ['class' => 'span6'],
             ])
         ->add('save', SubmitType::class, [
             'attr' => ['class' => 'btn btn-inverse'],

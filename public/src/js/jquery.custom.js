@@ -48,14 +48,14 @@ function galleryHover() {
 	});
 }
 
-////////// Function for blog post rollovers //////////
+////////// Function for home post rollovers //////////
 postHover();
 function postHover() {		
-	$('.blog-post-item').hover(function(){		
-			$(this).find('.blog-post-hover').stop('true','true').fadeTo("normal",1);
+	$('.home-post-item').hover(function(){
+			$(this).find('.home-post-hover').stop('true','true').fadeTo("normal",1);
 	},
 		function(){
-			$(this).find('.blog-post-hover').stop('true','true').fadeTo("normal",0);
+			$(this).find('.home-post-hover').stop('true','true').fadeTo("normal",0);
 	});
 }
 

@@ -13,6 +13,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 class Post
 {
+    public const NUM_ITEMS = 10;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
