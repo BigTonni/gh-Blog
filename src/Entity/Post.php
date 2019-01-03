@@ -86,6 +86,12 @@ class Post
      */
     private $author;
 
+    /**
+     * @ORM\Column(type="integer", name="i_like")
+     * @Assert\Type(type="integer")
+     */
+    private $like;
+
     public function __construct(User $author)
     {
         $this->isPublished = true;
@@ -209,6 +215,18 @@ class Post
     public function setAuthor(?User $author): self
     {
         $this->author = $author;
+
+        return $this;
+    }
+
+    public function getLike()
+    {
+        return $this->like;
+    }
+
+    public function setLike($like): self
+    {
+        $this->like = $like;
 
         return $this;
     }

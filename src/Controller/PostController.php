@@ -213,7 +213,7 @@ class PostController extends AbstractController
     public function search(Request $request, PostRepository $postRepository, PaginatorInterface $paginator): Response
     {
         $query = $postRepository->findBySearchQuery($request->query->get('q', ''),
-                                                    $request->query->get('l', 10));
+            $request->query->get('l', 10));
 
         if (!$query) {
             throw $this->createNotFoundException('The post does not exist');
@@ -224,6 +224,22 @@ class PostController extends AbstractController
         return $this->render('post/search.html.twig', [
             'posts' => $posts,
         ]);
+    }
+
+    /**
+     * @Route("post/like/{slug}", name="post_like")
+     */
+    public function like(Request $request, Post $post): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
+        $post->setLike($post->getLike() + 1);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($post);
+        $em->flush();
+
+        return $this->redirectToRoute('post_show', ['slug' => $post->getSlug()]);
     }
 
     private function checkUser(Post $post): bool
