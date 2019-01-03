@@ -13,6 +13,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 class Post
 {
+    public const NUM_ITEMS = 10;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -83,6 +85,12 @@ class Post
      * @ORM\JoinColumn(nullable=false)
      */
     private $author;
+
+    /**
+     * @ORM\Column(type="integer", name="i_like")
+     * @Assert\Type(type="integer")
+     */
+    private $like;
 
     public function __construct(User $author)
     {
@@ -207,6 +215,18 @@ class Post
     public function setAuthor(?User $author): self
     {
         $this->author = $author;
+
+        return $this;
+    }
+
+    public function getLike()
+    {
+        return $this->like;
+    }
+
+    public function setLike($like): self
+    {
+        $this->like = $like;
 
         return $this;
     }

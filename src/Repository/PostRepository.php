@@ -25,15 +25,56 @@ class PostRepository extends ServiceEntityRepository
             ->innerJoin('p.category', 'c')
             ->where('c.id IN (:id)')
             ->setParameter(':id', $id)
-            ->getQuery();
+            ->getQuery()
+            ->getResult();
     }
 
-  public function findPostsByAuthorId($id)
+    public function findPostsByAuthorId($id)
     {
         return $this->createQueryBuilder('p')
             ->innerJoin('p.author', 'u')
             ->where('u.id IN (:id)')
             ->setParameter(':id', $id)
-            ->getQuery();
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return Post[]
+     */
+    public function findBySearchQuery(string $rawQuery, int $limit = Post::NUM_ITEMS): array
+    {
+        $query = $this->sanitizeSearchQuery($rawQuery);
+        $searchTerms = $this->extractSearchTerms($query);
+        if (0 === \count($searchTerms)) {
+            return [];
+        }
+        $queryBuilder = $this->createQueryBuilder('p');
+        foreach ($searchTerms as $key => $term) {
+            $queryBuilder
+                ->orWhere('p.title LIKE :t_'.$key)
+                ->setParameter('t_'.$key, '%'.$term.'%')
+            ;
+        }
+
+        return $queryBuilder
+            ->orderBy('p.createdAt', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
+    private function sanitizeSearchQuery(string $query): string
+    {
+        return trim(preg_replace('/[[:space:]]+/', ' ', $query));
+    }
+
+    private function extractSearchTerms(string $searchQuery): array
+    {
+        $terms = array_unique(explode(' ', $searchQuery));
+
+        return array_filter($terms, function ($term) {
+            return 2 <= mb_strlen($term);
+        });
     }
 }

@@ -25,6 +25,11 @@
 
                     <div class="post-summary-footer">
                         <ul class="post-data">
+                            {% if app.user == post.author %}
+                                <li><i class="icon-edit"></i><a href="{{ path('post_edit', {'slug': post.slug}) }}">Edit</a></li>
+                                <li><i class="icon-remove"></i><a href="{{ path('post_delete', {'slug': post.slug}) }}" onclick="return confirm('Do you really want to delete this post??')">Delete</a></li>
+                            {% endif %}
+                            <li><a href="{{ path('post_like', {'slug': post.slug}) }}"><i class="icon-heart"></i>{{ post.like }}</a></li>
                             <li><i class="icon-calendar"></i>{{ post.createdAt | date('Y-m-d') }}</li>
                             <li><i class="icon-user"></i> <a href="{{ path('author_posts_show', {'slug': post.author.slug}) }}">{{ post.author.fullname | title }}</a></li>
                             <li><i class="icon-comment"></i> {{ countComment.commentCount }} Comments</li>
@@ -56,7 +61,7 @@
                 <!-- Comment Form -->
                 {% if is_granted('ROLE_USER') %}
                     {% block commentForm %}
-                        {{ render(controller('App\\Controller\\BlogController::createComment', {'id': post.id})) }}
+                        {{ render(controller('App\\Controller\\CommentController::new', {'slug': post.slug})) }}
                     {% endblock %}
                 {% endif %}
 
@@ -67,7 +72,7 @@
         <!-- Blog Sidebar
         ================================================== -->
         {% block right_sidebar %}
-            {{ render(controller('App\\Controller\\BlogController::rightSidebar')) }}
+            {{ render(controller('App\\Controller\\HomeController::rightSidebar')) }}
         {% endblock %}
     </div>
 

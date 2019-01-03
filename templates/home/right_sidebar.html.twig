@@ -3,9 +3,9 @@
         <!--Search-->
         <section>
             <div class="input-append">
-                <form action="#">
-                    <input id="appendedInputButton" size="16" type="text" placeholder="Search">
-                    <button class="btn" type="button"><i class="icon-search"></i></button>
+                <form action="{{ path('post_search') }}">
+                    <input minlength="2" name="q" placeholder="Search query" id="appendedInputButton" size="16" type="text">
+                    <button class="btn" type="submit"><i class="icon-search"></i></button>
                 </form>
             </div>
         </section>
