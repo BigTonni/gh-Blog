@@ -97,7 +97,6 @@ class Post
         $this->isPublished = true;
         $this->comments = new ArrayCollection();
         $this->author = $author;
-        $this->tags = new ArrayCollection();
     }
 
     public function getSlug(): string
