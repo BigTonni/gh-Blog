@@ -207,7 +207,13 @@ class PostController extends AbstractController
         return $this->redirectToRoute('home');
     }
 
+
     /**
+     * @param Request $request
+     * @param PostRepository $postRepository
+     * @param PaginatorInterface $paginator
+     * @return Response
+     *
      * @Route("post/search", methods={"GET"}, name="post_search")
      */
     public function search(Request $request, PostRepository $postRepository, PaginatorInterface $paginator): Response
@@ -227,9 +233,12 @@ class PostController extends AbstractController
     }
 
     /**
+     * @param Post $post
+     * @return Response
+     *
      * @Route("post/like/{slug}", name="post_like")
      */
-    public function like(Request $request, Post $post): Response
+    public function like(Post $post): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
 
@@ -242,6 +251,10 @@ class PostController extends AbstractController
         return $this->redirectToRoute('post_show', ['slug' => $post->getSlug()]);
     }
 
+    /**
+     * @param Post $post
+     * @return bool
+     */
     private function checkUser(Post $post): bool
     {
         return $post->getAuthor() === $this->getUser();

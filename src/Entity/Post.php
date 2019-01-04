@@ -87,7 +87,7 @@ class Post
     private $author;
 
     /**
-     * @ORM\Column(type="integer", name="i_like")
+     * @ORM\Column(type="integer", name="i_like", nullable=true)
      * @Assert\Type(type="integer")
      */
     private $like;
@@ -97,6 +97,7 @@ class Post
         $this->isPublished = true;
         $this->comments = new ArrayCollection();
         $this->author = $author;
+        $this->tags = new ArrayCollection();
     }
 
     public function getSlug(): string
@@ -205,6 +206,8 @@ class Post
     {
         $comment->setPost(null);
         $this->comments->removeElement($comment);
+
+        return $this;
     }
 
     public function getAuthor(): ?User
