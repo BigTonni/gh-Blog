@@ -11,8 +11,15 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
+/**
+ * Class UserAdmin
+ * @package App\Admin
+ */
 class UserAdmin extends AbstractAdmin
 {
+    /**
+     * @param FormMapper $formMapper
+     */
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
@@ -25,17 +32,27 @@ class UserAdmin extends AbstractAdmin
             ->end();
     }
 
+    /**
+     * @param DatagridMapper $datagridMapper
+     */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper->add('email');
     }
 
+    /**
+     * @param ListMapper $listMapper
+     */
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper->addIdentifier('email');
     }
 
-    public function toString($object)
+    /**
+     * @param $object
+     * @return string|null
+     */
+    public function toString($object): string 
     {
         return $object instanceof User
             ? $object->getEmail()

@@ -14,11 +14,19 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class PostRepository extends ServiceEntityRepository
 {
+    /**
+     * PostRepository constructor.
+     * @param RegistryInterface $registry
+     */
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Post::class);
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function findPostsByCategoryId($id)
     {
         return $this->createQueryBuilder('p')
@@ -29,6 +37,10 @@ class PostRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function findPostsByAuthorId($id)
     {
         return $this->createQueryBuilder('p')
@@ -64,11 +76,19 @@ class PostRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * @param string $query
+     * @return string
+     */
     private function sanitizeSearchQuery(string $query): string
     {
         return trim(preg_replace('/[[:space:]]+/', ' ', $query));
     }
 
+    /**
+     * @param string $searchQuery
+     * @return array
+     */
     private function extractSearchTerms(string $searchQuery): array
     {
         $terms = array_unique(explode(' ', $searchQuery));

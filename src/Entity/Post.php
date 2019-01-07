@@ -13,6 +13,9 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 class Post
 {
+    /**
+     *
+     */
     public const NUM_ITEMS = 10;
 
     /**
@@ -41,7 +44,9 @@ class Post
      * @Assert\NotBlank()
      * @Assert\Length(
      *     min="2",
-     *     max="255"
+     *     max="255",
+     *     minMessage="Title must contain at least {{ limit }} characters",
+     *     maxMessage="Title should contain no more than {{ limit }} characters",
      * )
      */
     private $title;
@@ -50,7 +55,8 @@ class Post
      * @ORM\Column(type="text")
      * @Assert\NotBlank()
      * @Assert\Length(
-     *     min = 2
+     *     min="2",
+     *     minMessage="Content must contain at least {{limit}} characters",
      * )
      */
     private $content;
@@ -92,17 +98,27 @@ class Post
      */
     private $like;
 
+    /**
+     * Post constructor.
+     */
     public function __construct()
     {
         $this->isPublished = true;
         $this->comments = new ArrayCollection();
     }
 
+    /**
+     * @return string
+     */
     public function getSlug(): string
     {
         return $this->slug;
     }
 
+    /**
+     * @param $slug
+     * @return Post
+     */
     public function setSlug($slug): self
     {
         $this->slug = $slug;
@@ -110,11 +126,18 @@ class Post
         return $this;
     }
 
+    /**
+     * @return mixed
+     */
     public function getCategory()
     {
         return $this->category;
     }
 
+    /**
+     * @param $category
+     * @return Post
+     */
     public function setCategory($category): self
     {
         $this->category = $category;
@@ -122,16 +145,26 @@ class Post
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * @return string|null
+     */
     public function getTitle(): ?string
     {
         return $this->title;
     }
 
+    /**
+     * @param string $title
+     * @return Post
+     */
     public function setTitle(string $title): self
     {
         $this->title = $title;
@@ -139,11 +172,18 @@ class Post
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getContent(): ?string
     {
         return $this->content;
     }
 
+    /**
+     * @param string $content
+     * @return Post
+     */
     public function setContent(string $content): self
     {
         $this->content = $content;
@@ -151,11 +191,18 @@ class Post
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function getisPublished(): bool
     {
         return $this->isPublished;
     }
 
+    /**
+     * @param bool $isPublished
+     * @return Post
+     */
     public function setIsPublished(bool $isPublished): self
     {
         $this->isPublished = $isPublished;
@@ -163,11 +210,18 @@ class Post
         return $this;
     }
 
+    /**
+     * @return \DateTime
+     */
     public function getCreatedAt(): \DateTime
     {
         return $this->createdAt;
     }
 
+    /**
+     * @param \DateTime $createdAt
+     * @return Post
+     */
     public function setCreatedAt(\DateTime $createdAt): self
     {
         $this->createdAt = $createdAt;
@@ -175,11 +229,18 @@ class Post
         return $this;
     }
 
+    /**
+     * @return \DateTime
+     */
     public function getUpdatedAt(): \DateTime
     {
         return $this->updatedAt;
     }
 
+    /**
+     * @param \DateTime $updatedAt
+     * @return Post
+     */
     public function setUpdatedAt(\DateTime $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
@@ -187,11 +248,17 @@ class Post
         return $this;
     }
 
+    /**
+     * @return Collection
+     */
     public function getComments(): Collection
     {
         return $this->comments;
     }
 
+    /**
+     * @param Comment|null $comment
+     */
     public function addComment(?Comment $comment): void
     {
         $comment->setPost($this);
@@ -200,6 +267,10 @@ class Post
         }
     }
 
+    /**
+     * @param Comment $comment
+     * @return Post
+     */
     public function removeComment(Comment $comment): self
     {
         $comment->setPost(null);
@@ -208,11 +279,18 @@ class Post
         return $this;
     }
 
+    /**
+     * @return User|null
+     */
     public function getAuthor(): ?User
     {
         return $this->author;
     }
 
+    /**
+     * @param User|null $author
+     * @return Post
+     */
     public function setAuthor(?User $author): self
     {
         $this->author = $author;
@@ -220,11 +298,18 @@ class Post
         return $this;
     }
 
+    /**
+     * @return mixed
+     */
     public function getLike()
     {
         return $this->like;
     }
 
+    /**
+     * @param $like
+     * @return Post
+     */
     public function setLike($like): self
     {
         $this->like = $like;
