@@ -8,6 +8,10 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
+/**
+ * Class UserFixtures
+ * @package App\DataFixtures
+ */
 class UserFixtures extends Fixture implements OrderedFixtureInterface
 {
     /**
@@ -23,6 +27,9 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
         $this->passwordEncoder = $passwordEncoder;
     }
 
+    /**
+     * @param ObjectManager $manager
+     */
     public function load(ObjectManager $manager): void
     {
         $user = new User();
@@ -43,11 +50,23 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
 
         $this->setReference('admin-user', $admin);
 
+        $superAdmin = new User();
+        $superAdmin->setEmail('superadmin@example.com');
+        $superAdmin->setFullName('Super Admin Name');
+        $superAdmin->setRoles(['ROLE_SUPER_ADMIN']);
+        $superAdmin->setPassword($this->passwordEncoder->encodePassword($superAdmin, '12345'));
+        $manager->persist($superAdmin);
+
+        $this->setReference('admin-user', $admin);
+
         $manager->flush();
     }
 
-    public function getOrder()
+    /**
+     * @return int
+     */
+    public function getOrder(): int
     {
-        return 1;
+        return 2;
     }
 }

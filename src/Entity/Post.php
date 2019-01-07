@@ -92,11 +92,10 @@ class Post
      */
     private $like;
 
-    public function __construct(User $author)
+    public function __construct()
     {
         $this->isPublished = true;
         $this->comments = new ArrayCollection();
-        $this->author = $author;
     }
 
     public function getSlug(): string

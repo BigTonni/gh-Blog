@@ -7,13 +7,23 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
+/**
+ * Class CategoryFixtures
+ * @package App\DataFixtures
+ */
 class CategoryFixtures extends Fixture implements OrderedFixtureInterface
 {
-    public function load(ObjectManager $manager)
+    /**
+     * @param ObjectManager $manager
+     */
+    public function load(ObjectManager $manager): void
     {
         $this->loadCategory($manager);
     }
 
+    /**
+     * @param ObjectManager $manager
+     */
     private function loadCategory(ObjectManager $manager)
     {
         foreach ($this->getCategory() as $index => $name) {
@@ -25,6 +35,9 @@ class CategoryFixtures extends Fixture implements OrderedFixtureInterface
         $manager->flush();
     }
 
+    /**
+     * @return array
+     */
     public function getCategory(): array
     {
         return [
@@ -41,8 +54,11 @@ class CategoryFixtures extends Fixture implements OrderedFixtureInterface
         ];
     }
 
-    public function getOrder()
+    /**
+     * @return int
+     */
+    public function getOrder(): int
     {
-        return 2;
+        return 3;
     }
 }

@@ -38,7 +38,6 @@ class Category
     /**
      * @Gedmo\Slug(fields={"name"})
      * @ORM\Column(type="string", unique=true)
-     * @Gedmo\Blameable(field="name", on="update")
      */
     private $slug;
 
