@@ -16,6 +16,7 @@ class CommentRepository extends ServiceEntityRepository
 {
     /**
      * CommentRepository constructor.
+     *
      * @param RegistryInterface $registry
      */
     public function __construct(RegistryInterface $registry)
@@ -25,7 +26,9 @@ class CommentRepository extends ServiceEntityRepository
 
     /**
      * @param $post_id
+     *
      * @return mixed
+     *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function getCountCommentForPost($post_id)

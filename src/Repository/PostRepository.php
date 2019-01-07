@@ -16,6 +16,7 @@ class PostRepository extends ServiceEntityRepository
 {
     /**
      * PostRepository constructor.
+     *
      * @param RegistryInterface $registry
      */
     public function __construct(RegistryInterface $registry)
@@ -25,6 +26,7 @@ class PostRepository extends ServiceEntityRepository
 
     /**
      * @param $id
+     *
      * @return mixed
      */
     public function findPostsByCategoryId($id)
@@ -39,6 +41,7 @@ class PostRepository extends ServiceEntityRepository
 
     /**
      * @param $id
+     *
      * @return mixed
      */
     public function findPostsByAuthorId($id)
@@ -78,6 +81,7 @@ class PostRepository extends ServiceEntityRepository
 
     /**
      * @param string $query
+     *
      * @return string
      */
     private function sanitizeSearchQuery(string $query): string
@@ -87,6 +91,7 @@ class PostRepository extends ServiceEntityRepository
 
     /**
      * @param string $searchQuery
+     *
      * @return array
      */
     private function extractSearchTerms(string $searchQuery): array

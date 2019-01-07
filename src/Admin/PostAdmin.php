@@ -15,8 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 /**
- * Class PostAdmin
- * @package App\Admin
+ * Class PostAdmin.
  */
 class PostAdmin extends AbstractAdmin
 {
@@ -70,6 +69,7 @@ class PostAdmin extends AbstractAdmin
 
     /**
      * @param $object
+     *
      * @return string|null
      */
     public function toString($object): ?string

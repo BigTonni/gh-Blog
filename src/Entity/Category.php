@@ -61,6 +61,7 @@ class Category
 
     /**
      * @param $posts
+     *
      * @return Category
      */
     public function setPosts($posts): self
@@ -88,6 +89,7 @@ class Category
 
     /**
      * @param string $name
+     *
      * @return Category
      */
     public function setName(string $name): self
@@ -107,6 +109,7 @@ class Category
 
     /**
      * @param $slug
+     *
      * @return Category
      */
     public function setSlug($slug): self

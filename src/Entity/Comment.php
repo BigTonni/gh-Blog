@@ -68,6 +68,7 @@ class Comment
 
     /**
      * @param string $content
+     *
      * @return Comment
      */
     public function setContent(string $content): self
@@ -103,6 +104,7 @@ class Comment
 
     /**
      * @param $publishedAt
+     *
      * @return Comment
      */
     public function setPublishedAt($publishedAt): self
@@ -122,6 +124,7 @@ class Comment
 
     /**
      * @param User $author
+     *
      * @return Comment
      */
     public function setAuthor(User $author): self

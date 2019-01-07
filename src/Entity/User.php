@@ -102,6 +102,7 @@ class User implements UserInterface
 
     /**
      * @param $slug
+     *
      * @return User
      */
     public function setSlug($slug): self
@@ -113,6 +114,7 @@ class User implements UserInterface
 
     /**
      * @param string $fullName
+     *
      * @return User
      */
     public function setFullName(string $fullName): self
@@ -140,6 +142,7 @@ class User implements UserInterface
 
     /**
      * @param string $email
+     *
      * @return User
      */
     public function setEmail(string $email): self
@@ -172,6 +175,7 @@ class User implements UserInterface
 
     /**
      * @param array $roles
+     *
      * @return User
      */
     public function setRoles(array $roles): self
@@ -191,6 +195,7 @@ class User implements UserInterface
 
     /**
      * @param string $password
+     *
      * @return User
      */
     public function setPassword(string $password): self
@@ -210,6 +215,7 @@ class User implements UserInterface
 
     /**
      * @param $password
+     *
      * @return User
      */
     public function setPlainPassword($password): self

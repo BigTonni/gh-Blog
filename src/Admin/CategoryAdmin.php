@@ -10,8 +10,7 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 /**
- * Class CategoryAdmin
- * @package App\Admin
+ * Class CategoryAdmin.
  */
 class CategoryAdmin extends AbstractAdmin
 {
@@ -41,6 +40,7 @@ class CategoryAdmin extends AbstractAdmin
 
     /**
      * @param $object
+     *
      * @return string|null
      */
     public function toString($object): ?string

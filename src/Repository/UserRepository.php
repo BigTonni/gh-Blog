@@ -16,6 +16,7 @@ class UserRepository extends ServiceEntityRepository
 {
     /**
      * UserRepository constructor.
+     *
      * @param RegistryInterface $registry
      */
     public function __construct(RegistryInterface $registry)

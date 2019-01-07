@@ -13,9 +13,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 class Post
 {
-    /**
-     *
-     */
     public const NUM_ITEMS = 10;
 
     /**
@@ -117,6 +114,7 @@ class Post
 
     /**
      * @param $slug
+     *
      * @return Post
      */
     public function setSlug($slug): self
@@ -136,6 +134,7 @@ class Post
 
     /**
      * @param $category
+     *
      * @return Post
      */
     public function setCategory($category): self
@@ -163,6 +162,7 @@ class Post
 
     /**
      * @param string $title
+     *
      * @return Post
      */
     public function setTitle(string $title): self
@@ -182,6 +182,7 @@ class Post
 
     /**
      * @param string $content
+     *
      * @return Post
      */
     public function setContent(string $content): self
@@ -201,6 +202,7 @@ class Post
 
     /**
      * @param bool $isPublished
+     *
      * @return Post
      */
     public function setIsPublished(bool $isPublished): self
@@ -220,6 +222,7 @@ class Post
 
     /**
      * @param \DateTime $createdAt
+     *
      * @return Post
      */
     public function setCreatedAt(\DateTime $createdAt): self
@@ -239,6 +242,7 @@ class Post
 
     /**
      * @param \DateTime $updatedAt
+     *
      * @return Post
      */
     public function setUpdatedAt(\DateTime $updatedAt): self
@@ -269,6 +273,7 @@ class Post
 
     /**
      * @param Comment $comment
+     *
      * @return Post
      */
     public function removeComment(Comment $comment): self
@@ -289,6 +294,7 @@ class Post
 
     /**
      * @param User|null $author
+     *
      * @return Post
      */
     public function setAuthor(?User $author): self
@@ -308,6 +314,7 @@ class Post
 
     /**
      * @param $like
+     *
      * @return Post
      */
     public function setLike($like): self

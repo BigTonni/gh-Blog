@@ -9,13 +9,13 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 
 /**
- * Class PostFixtures
- * @package App\DataFixtures
+ * Class PostFixtures.
  */
 class PostFixtures extends Fixture implements OrderedFixtureInterface
 {
     /**
      * @param ObjectManager $manager
+     *
      * @throws \Exception
      */
     public function load(ObjectManager $manager): void
@@ -25,6 +25,7 @@ class PostFixtures extends Fixture implements OrderedFixtureInterface
 
     /**
      * @param ObjectManager $manager
+     *
      * @throws \Exception
      */
     public function loadPosts(ObjectManager $manager): void
@@ -81,6 +82,7 @@ class PostFixtures extends Fixture implements OrderedFixtureInterface
 
     /**
      * @param int $maxLength
+     *
      * @return string
      */
     public function getRandomComment(int $maxLength = 255): string

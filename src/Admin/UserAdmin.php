@@ -12,8 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 /**
- * Class UserAdmin
- * @package App\Admin
+ * Class UserAdmin.
  */
 class UserAdmin extends AbstractAdmin
 {
@@ -50,9 +49,10 @@ class UserAdmin extends AbstractAdmin
 
     /**
      * @param $object
+     *
      * @return string|null
      */
-    public function toString($object): string 
+    public function toString($object): string
     {
         return $object instanceof User
             ? $object->getEmail()
