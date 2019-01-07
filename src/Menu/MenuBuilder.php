@@ -57,16 +57,22 @@ class MenuBuilder
                         'class' => 'nav-item', ]
                 );
         } else {
+            if ($this->checker->isGranted('ROLE_SUPER_ADMIN')) {
+                $menu->addChild('Admin Panel', ['route' => 'sonata_admin_dashboard'])
+                    ->setAttributes([
+                            'class' => 'nav-item', ]
+                    );
+            }
             if ($this->checker->isGranted('ROLE_ADMIN')) {
                 $menu->addChild('Create Post', ['route' => 'post_new'])
                     ->setAttributes([
                             'class' => 'nav-item', ]
                     );
+                $menu->addChild('My Posts', ['route' => 'show_my_posts'])
+                    ->setAttributes([
+                            'class' => 'nav-item', ]
+                    );
             }
-            $menu->addChild('My Posts', ['route' => 'show_my_posts'])
-                ->setAttributes([
-                    'class' => 'nav-item', ]
-                );
             $menu->addChild('Logout', ['route' => 'app_logout'])
                 ->setAttributes([
                         'class' => 'nav-item', ]

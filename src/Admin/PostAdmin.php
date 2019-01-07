@@ -14,8 +14,14 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
+/**
+ * Class PostAdmin.
+ */
 class PostAdmin extends AbstractAdmin
 {
+    /**
+     * @param FormMapper $formMapper
+     */
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
@@ -36,6 +42,9 @@ class PostAdmin extends AbstractAdmin
         ;
     }
 
+    /**
+     * @param DatagridMapper $datagridMapper
+     */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
@@ -47,6 +56,9 @@ class PostAdmin extends AbstractAdmin
         ;
     }
 
+    /**
+     * @param ListMapper $listMapper
+     */
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
@@ -55,7 +67,12 @@ class PostAdmin extends AbstractAdmin
         ;
     }
 
-    public function toString($object)
+    /**
+     * @param $object
+     *
+     * @return string|null
+     */
+    public function toString($object): ?string
     {
         return $object instanceof Post
             ? $object->getTitle()

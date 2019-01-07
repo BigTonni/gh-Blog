@@ -8,8 +8,7 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
 /**
- * Class CategoryFixtures
- * @package App\DataFixtures
+ * Class CategoryFixtures.
  */
 class CategoryFixtures extends Fixture implements OrderedFixtureInterface
 {

@@ -25,7 +25,9 @@ class Category
      * @Assert\NotBlank()
      * @Assert\Length(
      *     min="2",
-     *     max="255"
+     *     max="255",
+     *     minMessage="Category name must contain at least {{limit}} characters",
+     *     maxMessage="Category name must contain no more than {{limit}} characters",
      * )
      */
     private $name;
@@ -41,6 +43,9 @@ class Category
      */
     private $slug;
 
+    /**
+     * Category constructor.
+     */
     public function __construct()
     {
         $this->posts = new ArrayCollection();
@@ -54,6 +59,11 @@ class Category
         return $this->posts;
     }
 
+    /**
+     * @param $posts
+     *
+     * @return Category
+     */
     public function setPosts($posts): self
     {
         $this->posts = $posts;
@@ -61,16 +71,27 @@ class Category
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * @return string|null
+     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
+    /**
+     * @param string $name
+     *
+     * @return Category
+     */
     public function setName(string $name): self
     {
         $this->name = $name;
@@ -78,11 +99,19 @@ class Category
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getSlug(): string
     {
         return $this->slug;
     }
 
+    /**
+     * @param $slug
+     *
+     * @return Category
+     */
     public function setSlug($slug): self
     {
         $this->slug = $slug;

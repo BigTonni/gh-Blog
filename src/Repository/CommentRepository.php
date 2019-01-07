@@ -14,11 +14,23 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class CommentRepository extends ServiceEntityRepository
 {
+    /**
+     * CommentRepository constructor.
+     *
+     * @param RegistryInterface $registry
+     */
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Comment::class);
     }
 
+    /**
+     * @param $post_id
+     *
+     * @return mixed
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
     public function getCountCommentForPost($post_id)
     {
         return $this->createQueryBuilder('c')

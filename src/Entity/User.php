@@ -23,6 +23,9 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\Email(
+     *     message = "The email '{{ value }}' is not a valid email.",
+     * )
      */
     private $email;
 
@@ -36,8 +39,9 @@ class User implements UserInterface
      * @ORM\Column(type="string")
      * @Assert\Length(
      *     min="6",
+     *     max="4096",
      *     minMessage="Your password should be at least {{ limit }} characters",
-     *     max="4096"
+     *     maxMessage="Your password must contain no more than {{ limit }} characters",
      * )
      */
     private $password;
@@ -45,8 +49,9 @@ class User implements UserInterface
     /**
      * @Assert\Length(
      *     min="6",
+     *     max="4096",
      *     minMessage="Your password should be at least {{ limit }} characters",
-     *     max="4096"
+     *     maxMessage="Your password must contain no more than {{ limit }} characters",
      * )
      */
     private $plainPassword;
@@ -56,7 +61,12 @@ class User implements UserInterface
      *
      * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
-     * @Assert\Length(min="2")
+     * @Assert\Length(
+     *     min="2",
+     *     max="255",
+     *     minMessage="Your name must contain at least {{ limit }} characters",
+     *     maxMessage="Your name must contain no more than {{ limit }} characters",
+     * )
      */
     private $fullName;
 
@@ -66,21 +76,35 @@ class User implements UserInterface
      */
     private $slug;
 
+    /**
+     * User constructor.
+     */
     public function __construct()
     {
         $this->roles = ['ROLE_USER'];
     }
 
+    /**
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * @return string
+     */
     public function getSlug(): string
     {
         return $this->slug;
     }
 
+    /**
+     * @param $slug
+     *
+     * @return User
+     */
     public function setSlug($slug): self
     {
         $this->slug = $slug;
@@ -88,6 +112,11 @@ class User implements UserInterface
         return $this;
     }
 
+    /**
+     * @param string $fullName
+     *
+     * @return User
+     */
     public function setFullName(string $fullName): self
     {
         $this->fullName = $fullName;
@@ -95,16 +124,27 @@ class User implements UserInterface
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getFullName(): string
     {
         return (string) $this->fullName;
     }
 
+    /**
+     * @return string|null
+     */
     public function getEmail(): ?string
     {
         return $this->email;
     }
 
+    /**
+     * @param string $email
+     *
+     * @return User
+     */
     public function setEmail(string $email): self
     {
         $this->email = $email;
@@ -133,6 +173,11 @@ class User implements UserInterface
         return array_unique($roles);
     }
 
+    /**
+     * @param array $roles
+     *
+     * @return User
+     */
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
@@ -148,6 +193,11 @@ class User implements UserInterface
         return (string) $this->password;
     }
 
+    /**
+     * @param string $password
+     *
+     * @return User
+     */
     public function setPassword(string $password): self
     {
         $this->password = $password;
@@ -155,11 +205,19 @@ class User implements UserInterface
         return $this;
     }
 
+    /**
+     * @return mixed
+     */
     public function getPlainPassword()
     {
         return $this->plainPassword;
     }
 
+    /**
+     * @param $password
+     *
+     * @return User
+     */
     public function setPlainPassword($password): self
     {
         $this->plainPassword = $password;

@@ -28,7 +28,12 @@ class Comment
     /**
      * @ORM\Column(type="text")
      * @Assert\NotBlank()
-     * @Assert\Length(min="2")
+     * @Assert\Length(
+     *     min="2",
+     *     max="2000",
+     *     minMessage="The comment must contain at least {{ limit }} characters",
+     *     maxMessage="The comment must contain no more than {{ limit }} characters",
+     * )
      */
     private $content;
 
@@ -45,16 +50,27 @@ class Comment
      */
     private $author;
 
+    /**
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * @return string|null
+     */
     public function getContent(): ?string
     {
         return $this->content;
     }
 
+    /**
+     * @param string $content
+     *
+     * @return Comment
+     */
     public function setContent(string $content): self
     {
         $this->content = $content;
@@ -62,21 +78,35 @@ class Comment
         return $this;
     }
 
+    /**
+     * @return Post|null
+     */
     public function getPost(): ?Post
     {
         return $this->post;
     }
 
+    /**
+     * @param Post|null $post
+     */
     public function setPost(?Post $post): void
     {
         $this->post = $post;
     }
 
+    /**
+     * @return \DateTime|null
+     */
     public function getPublishedAt(): ?\DateTime
     {
         return $this->publishedAt;
     }
 
+    /**
+     * @param $publishedAt
+     *
+     * @return Comment
+     */
     public function setPublishedAt($publishedAt): self
     {
         $this->publishedAt = $publishedAt;
@@ -84,11 +114,19 @@ class Comment
         return $this;
     }
 
+    /**
+     * @return User
+     */
     public function getAuthor(): User
     {
         return $this->author;
     }
 
+    /**
+     * @param User $author
+     *
+     * @return Comment
+     */
     public function setAuthor(User $author): self
     {
         $this->author = $author;
