@@ -43,7 +43,6 @@ class User implements UserInterface
     private $password;
 
     /**
-     * @Assert\NotBlank()
      * @Assert\Length(
      *     min="6",
      *     minMessage="Your password should be at least {{ limit }} characters",
@@ -129,7 +128,6 @@ class User implements UserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
 
         return array_unique($roles);

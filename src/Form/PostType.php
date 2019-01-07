@@ -28,8 +28,8 @@ class PostType extends AbstractType
                 'choice_label' => 'name',
                 'attr' => ['class' => 'span6'],
             ])
-        ->add('save', SubmitType::class, [
-            'attr' => ['class' => 'btn btn-inverse'],
+            ->add('save', SubmitType::class, [
+                'attr' => ['class' => 'btn btn-inverse'],
             ]);
     }
 

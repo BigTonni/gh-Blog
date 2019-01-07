@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
  * Class CommentController.
@@ -21,12 +22,11 @@ class CommentController extends AbstractController
      *
      * @return Response
      *
+     * @IsGranted("ROLE_USER")
      * @Route("/comment/{slug}/new", methods={"POST"}, name="comment_create")
      */
     public function new(Request $request, Post $post): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
-
         $comment = new Comment();
         $post->addComment($comment);
         $comment->setAuthor($this->getUser());

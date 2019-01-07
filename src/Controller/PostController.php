@@ -9,6 +9,7 @@ use App\Entity\Comment;
 use App\Entity\Post;
 use App\Repository\PostRepository;
 use Knp\Component\Pager\PaginatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -127,12 +128,13 @@ class PostController extends AbstractController
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      *
+     * @IsGranted("ROLE_ADMIN")
      * @Route("/post/new", name="post_new")
      */
     public function new(Request $request): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
-        $post = new Post($this->getUser());
+        $post = new Post();
+        $post->setAuthor($this->getUser());
 
         $form = $this->createForm(PostType::class, $post, [
             'action' => $this->generateUrl('post_new'),
@@ -160,12 +162,11 @@ class PostController extends AbstractController
      *
      * @return Response
      *
+     * @IsGranted("ROLE_ADMIN")
      * @Route("post/edit/{slug}", name="post_edit")
      */
     public function edit(Request $request, Post $post): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
-
         if (!$this->checkUser($post)) {
             return $this->redirectToRoute('home');
         }
@@ -190,12 +191,11 @@ class PostController extends AbstractController
      *
      * @return Response
      *
+     * @IsGranted("ROLE_ADMIN")
      * @Route("post/delete/{slug}", name="post_delete")
      */
     public function delete(Post $post): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
-
         if (!$this->checkUser($post)) {
             return $this->redirectToRoute('home');
         }
@@ -208,6 +208,12 @@ class PostController extends AbstractController
     }
 
     /**
+     * @param Request            $request
+     * @param PostRepository     $postRepository
+     * @param PaginatorInterface $paginator
+     *
+     * @return Response
+     *
      * @Route("post/search", methods={"GET"}, name="post_search")
      */
     public function search(Request $request, PostRepository $postRepository, PaginatorInterface $paginator): Response
@@ -227,12 +233,16 @@ class PostController extends AbstractController
     }
 
     /**
+     * @param Post $post
+     *
+     * @return Response
+     *
+     *
+     * @IsGranted("ROLE_USER")
      * @Route("post/like/{slug}", name="post_like")
      */
-    public function like(Request $request, Post $post): Response
+    public function like(Post $post): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
-
         $post->setLike($post->getLike() + 1);
 
         $em = $this->getDoctrine()->getManager();
@@ -242,6 +252,11 @@ class PostController extends AbstractController
         return $this->redirectToRoute('post_show', ['slug' => $post->getSlug()]);
     }
 
+    /**
+     * @param Post $post
+     *
+     * @return bool
+     */
     private function checkUser(Post $post): bool
     {
         return $post->getAuthor() === $this->getUser();

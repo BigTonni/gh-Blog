@@ -8,16 +8,29 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 
+/**
+ * Class PostFixtures
+ * @package App\DataFixtures
+ */
 class PostFixtures extends Fixture implements OrderedFixtureInterface
 {
-    public function load(ObjectManager $manager)
+    /**
+     * @param ObjectManager $manager
+     * @throws \Exception
+     */
+    public function load(ObjectManager $manager): void
     {
         $this->loadPosts($manager);
     }
 
-    public function loadPosts(ObjectManager $manager)
+    /**
+     * @param ObjectManager $manager
+     * @throws \Exception
+     */
+    public function loadPosts(ObjectManager $manager): void
     {
-        $post = new Post($this->getReference('admin-user'));
+        $post = new Post();
+        $post->setAuthor($this->getReference('admin-user'));
         $post->setTitle('First post title');
         $post->setContent('This is a little framework that makes ease-of-use its trademark.
              It is an open-source framework, licensed under the GNU license.
@@ -39,7 +52,8 @@ class PostFixtures extends Fixture implements OrderedFixtureInterface
         }
         $manager->persist($post);
 
-        $post1 = new Post($this->getReference('user-user'));
+        $post1 = new Post();
+        $post1->setAuthor($this->getReference('admin-user'));
         $post1->setTitle('Second post title');
         $post1->setContent('Yii is a PHP framework that has been developed by the same creators of Prado. To be honest, it was born as 
              an attempt to fix all the problems with Prado (see Prado review). Like other frameworks, it is released under 
@@ -65,6 +79,10 @@ class PostFixtures extends Fixture implements OrderedFixtureInterface
         $manager->flush();
     }
 
+    /**
+     * @param int $maxLength
+     * @return string
+     */
     public function getRandomComment(int $maxLength = 255): string
     {
         $phrases = $this->getComment();
@@ -76,6 +94,9 @@ class PostFixtures extends Fixture implements OrderedFixtureInterface
         return $text;
     }
 
+    /**
+     * @return array
+     */
     public function getComment(): array
     {
         return [
@@ -92,8 +113,11 @@ class PostFixtures extends Fixture implements OrderedFixtureInterface
         ];
     }
 
-    public function getOrder()
+    /**
+     * @return int
+     */
+    public function getOrder(): int
     {
-        return 3;
+        return 4;
     }
 }
