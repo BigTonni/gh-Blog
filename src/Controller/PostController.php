@@ -26,7 +26,7 @@ class PostController extends AbstractController
      * @return Response
      *
      * @throws \Doctrine\ORM\NonUniqueResultException
-     * 
+     *
      * @Route("/post/show/{slug}", name="post_show")
      */
     public function show(Post $post): Response

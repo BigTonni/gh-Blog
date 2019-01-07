@@ -31,8 +31,8 @@ class Comment
      * @Assert\Length(
      *     min="2",
      *     max="2000",
-     *     minMessage=""The comment must contain at least {{limit}} characters,
-     *     maxMessage="The comment must contain no more than {{limit}} characters",
+     *     minMessage="The comment must contain at least {{ limit }} characters",
+     *     maxMessage="The comment must contain no more than {{ limit }} characters",
      * )
      */
     private $content;
