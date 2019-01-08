@@ -26,23 +26,26 @@ class RegistrationFormType extends AbstractType
         $builder
             ->add('email', EmailType::class, [
                 'attr' => ['class' => 'span6'],
+                'label' => 'registration.email',
             ])
             ->add('fullName', TextType::class, [
                 'attr' => ['class' => 'span6'],
+                'label' => 'registration.fullName',
             ])
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'first_options' => [
-                    'label' => 'Password',
+                    'label' => 'registration.password',
                     'attr' => ['class' => 'span6'],
                 ],
                 'second_options' => [
-                    'label' => 'Repeat Password',
+                    'label' => 'registration.repeat_password',
                     'attr' => ['class' => 'span6'],
                 ],
             ])
             ->add('register', SubmitType::class, [
                 'attr' => ['class' => 'btn btn-inverse'],
+                'label' => 'registration.button_register',
             ])
         ;
     }
