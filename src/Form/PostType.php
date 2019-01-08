@@ -19,21 +19,21 @@ class PostType extends AbstractType
     {
         $builder
             ->add('title', TextType::class, [
-                'attr' => ['class' => 'span6'],
+                'attr' => ['class' => 'span12'],
                 'label' => 'post.title',
             ])
             ->add('content', TextareaType::class, [
-                'attr' => ['class' => 'span6'],
+                'attr' => ['class' => 'span10 ckeditor'],
                 'label' => 'post.content',
             ])
             ->add('category', EntityType::class, [
                 'class' => Category::class,
                 'choice_label' => 'name',
-                'attr' => ['class' => 'span6'],
+                'attr' => ['class' => 'span12'],
                 'label' => 'post.category',
             ])
             ->add('tags', TagsInputType::class, [
-                'attr' => ['class' => 'span6'],
+                'attr' => ['class' => 'span12'],
                 'required' => false,
                 'label' => 'post.tags',
             ])

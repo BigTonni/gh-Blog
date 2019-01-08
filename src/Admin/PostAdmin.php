@@ -28,7 +28,9 @@ class PostAdmin extends AbstractAdmin
         $formMapper
             ->with('Content', ['class' => 'col-md-9'])
             ->add('title', TextType::class)
-            ->add('content', TextareaType::class)
+            ->add('content', TextareaType::class, [
+                'attr' => ['class' => 'ckeditor'],
+            ])
             ->end()
             ->with('Meta data', ['class' => 'col-md-3'])
             ->add('category', ModelType::class, [
