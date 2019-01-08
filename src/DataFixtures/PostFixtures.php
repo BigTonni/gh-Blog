@@ -30,6 +30,9 @@ class PostFixtures extends Fixture implements OrderedFixtureInterface
      */
     public function loadPosts(ObjectManager $manager): void
     {
+        $tags = $this->getTags();
+        $category = $this->getCategory();
+
         $post = new Post();
         $post->setAuthor($this->getReference('admin-user'));
         $post->setTitle('First post title');
@@ -43,7 +46,12 @@ class PostFixtures extends Fixture implements OrderedFixtureInterface
              for connecting to the database and creating MySQL queries. The way it has built facilitates its 
              extendibility and reliability. If you want to give it a try or help the project grow you can support it 
              through its GitHub repository below.');
-        $post->setCategory($this->getReference('category-Test category 1'));
+        $post->setCategory($this->getReference('category-'.$category[0]));
+        $post->addTag(
+            $this->getReference('tag-'.$tags[0]),
+            $this->getReference('tag-'.$tags[1]),
+            $this->getReference('tag-'.$tags[2]))
+        ;
 
         foreach (range(1, 3) as $i) {
             $comment = new Comment();
@@ -67,7 +75,12 @@ class PostFixtures extends Fixture implements OrderedFixtureInterface
              PHP 7. There aren’t particular features or special peculiarities to Yii, but it is a pretty solid framework
              and among the characteristics of the latest release you will haveu want to give it a try or help the project grow you can support it 
              through its GitHub repository below.');
-        $post1->setCategory($this->getReference('category-Test category 2'));
+        $post1->setCategory($this->getReference('category-'.$category[1]));
+        $post1->addTag(
+            $this->getReference('tag-'.$tags[3]),
+            $this->getReference('tag-'.$tags[4]),
+            $this->getReference('tag-'.$tags[5])
+        );
 
         foreach (range(1, 3) as $i) {
             $comment = new Comment();
@@ -115,11 +128,25 @@ class PostFixtures extends Fixture implements OrderedFixtureInterface
         ];
     }
 
+    private function getTags(): array
+    {
+        $tag = new TagsFixtures();
+
+        return $tag->getTags();
+    }
+
+    private function getCategory(): array
+    {
+        $category = new CategoryFixtures();
+
+        return $category->getCategory();
+    }
+
     /**
      * @return int
      */
     public function getOrder(): int
     {
-        return 4;
+        return 5;
     }
 }

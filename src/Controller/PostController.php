@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Tag;
 use App\Form\PostType;
 use App\Entity\User;
 use App\Entity\Category;
@@ -31,14 +32,11 @@ class PostController extends AbstractController
      */
     public function show(Post $post): Response
     {
-        $category = $post->getCategory();
-
         $em = $this->getDoctrine()->getManager();
         $countComment = $em->getRepository(Comment::class)->getCountCommentForPost($post->getId());
 
         return $this->render('post/show.html.twig', [
             'post' => $post,
-            'category' => $category,
             'countComment' => $countComment,
         ]);
     }
@@ -62,12 +60,10 @@ class PostController extends AbstractController
         }
 
         $posts = $paginator->paginate($query, $request->query->getInt('page', 1));
-        $categories = $em->getRepository(Category::class)->findAll();
 
         return $this->render('home/content.twig', [
             'title' => 'Show Post in Category '.$category->getName(),
             'posts' => $posts,
-            'categories' => $categories,
         ]);
     }
 
@@ -90,12 +86,10 @@ class PostController extends AbstractController
         }
 
         $posts = $paginator->paginate($query, $request->query->getInt('page', 1));
-        $categories = $em->getRepository(Category::class)->findAll();
 
         return $this->render('home/content.twig', [
             'title' => 'View author posts '.$user->getFullName(),
             'posts' => $posts,
-            'categories' => $categories,
         ]);
     }
 
@@ -116,12 +110,36 @@ class PostController extends AbstractController
         }
 
         $posts = $paginator->paginate($query, $request->query->getInt('page', 1));
-        $categories = $em->getRepository(Category::class)->findAll();
 
         return $this->render('home/content.twig', [
             'title' => 'View author posts '.$this->getUser()->getFullName(),
             'posts' => $posts,
-            'categories' => $categories,
+        ]);
+    }
+
+    /**
+     * @param Request            $request
+     * @param PaginatorInterface $paginator
+     * @param Tag                $tag
+     *
+     * @return Response
+     *
+     * @Route("/tag/{slug}", name="posts_with_tag_show")
+     */
+    public function showPostsWithTag(Request $request, PaginatorInterface $paginator, Tag $tag): Response
+    {
+        $em = $this->getDoctrine()->getManager();
+        $query = $em->getRepository(Post::class)->findPostsByTagId($tag->getId());
+
+        if (!$query) {
+            throw $this->createNotFoundException('There are no posts with this tag.');
+        }
+
+        $posts = $paginator->paginate($query, $request->query->getInt('page', 1));
+
+        return $this->render('home/content.twig', [
+            'title' => 'View Posts Tagged With - '.$tag->getName(),
+            'posts' => $posts,
         ]);
     }
 

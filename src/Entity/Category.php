@@ -26,8 +26,8 @@ class Category
      * @Assert\Length(
      *     min="2",
      *     max="255",
-     *     minMessage="Category name must contain at least {{limit}} characters",
-     *     maxMessage="Category name must contain no more than {{limit}} characters",
+     *     minMessage="Category name must contain at least {{ limit }} characters",
+     *     maxMessage="Category name must contain no more than {{ limit }} characters",
      * )
      */
     private $name;

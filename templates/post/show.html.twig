@@ -33,8 +33,9 @@
                             <li><i class="icon-calendar"></i>{{ post.createdAt | date('Y-m-d') }}</li>
                             <li><i class="icon-user"></i> <a href="{{ path('author_posts_show', {'slug': post.author.slug}) }}">{{ post.author.fullname | title }}</a></li>
                             <li><i class="icon-comment"></i> {{ countComment.commentCount }} Comments</li>
-                            <li><a href="{{ path('posts_in_category_show', {'slug': category.slug}) }}"><i
-                                            class="icon-plus-sign"></i>{{ category.name }}</a></li>
+
+                            {{ include('tag/show.html.twig') }}
+
                         </ul>
                     </div>
                 </div>

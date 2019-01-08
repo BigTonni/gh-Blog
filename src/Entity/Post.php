@@ -96,12 +96,22 @@ class Post
     private $like;
 
     /**
+     * @var Tag[]|ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="App\Entity\Tag", cascade={"persist"})
+     * @ORM\OrderBy({"name": "ASC"})
+     * @Assert\Count(max="3")
+     */
+    private $tags;
+
+    /**
      * Post constructor.
      */
     public function __construct()
     {
         $this->isPublished = true;
         $this->comments = new ArrayCollection();
+        $this->tags = new ArrayCollection();
     }
 
     /**
@@ -322,5 +332,33 @@ class Post
         $this->like = $like;
 
         return $this;
+    }
+
+    /**
+     * @param Tag|null ...$tags
+     */
+    public function addTag(?Tag ...$tags): void
+    {
+        foreach ($tags as $tag) {
+            if (!$this->tags->contains($tag)) {
+                $this->tags->add($tag);
+            }
+        }
+    }
+
+    /**
+     * @param Tag $tag
+     */
+    public function removeTag(Tag $tag): void
+    {
+        $this->tags->removeElement($tag);
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getTags(): Collection
+    {
+        return $this->tags;
     }
 }
