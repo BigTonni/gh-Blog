@@ -5,7 +5,11 @@
 {% block body %}
 
     <div class="content">
-        {{ include('post/_form.html.twig') }}
+        <div class="row-fluid">
+            <div class="span10">
+                {{ include('post/_form.html.twig') }}
+            </div>
+        </div>
     </div>
 
 {% endblock %}

@@ -19,7 +19,7 @@
 
                     <div class="post-body">
                         <p>
-                            {{ post.content }}
+                            {{ post.content | raw}}
                         </p>
                     </div>
 
@@ -52,7 +52,7 @@
                             <img src="{{ asset('src/img/user-avatar.jpg') }}" alt="Image"/>
                             <span class="comment-name">{{ comment.author.fullName }}</span>
                             <span class="comment-date">{{ comment.publishedAt | date('Y-m-d') }}</span>
-                            <div class="comment-content">{{ comment.content }}</div>
+                            <div class="comment-content">{{ comment.content | raw }}</div>
                         </li>
                         </p>
                     {% endfor %}
