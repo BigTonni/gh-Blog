@@ -20,22 +20,26 @@ class PostType extends AbstractType
         $builder
             ->add('title', TextType::class, [
                 'attr' => ['class' => 'span6'],
+                'label' => 'post.title',
             ])
             ->add('content', TextareaType::class, [
                 'attr' => ['class' => 'span6'],
+                'label' => 'post.content',
             ])
             ->add('category', EntityType::class, [
                 'class' => Category::class,
                 'choice_label' => 'name',
                 'attr' => ['class' => 'span6'],
+                'label' => 'post.category',
             ])
             ->add('tags', TagsInputType::class, [
-                'label' => 'Tags',
                 'attr' => ['class' => 'span6'],
                 'required' => false,
+                'label' => 'post.tags',
             ])
             ->add('save', SubmitType::class, [
                 'attr' => ['class' => 'btn btn-inverse'],
+                'label' => 'post.button_save',
             ]);
     }
 

@@ -21,7 +21,7 @@
                             {{ post.content | length > 450 ? post.content | slice(0, 450) ~ '...' : post.content }}
                         </p>
                         <div class="post-summary-footer">
-                            <button class="btn btn-small btn-inverse" type="button" onclick="location.href='{{ path('post_show', {'slug': post.slug}) }}'">Read more</button>
+                            <button class="btn btn-small btn-inverse" type="button" onclick="location.href='{{ path('post_show', {'slug': post.slug}) }}'">{{ 'button.read_more' |trans }}</button>
                         </div>
                     </div>
                 </article>

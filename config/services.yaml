@@ -42,22 +42,22 @@ services:
         class: App\Admin\CategoryAdmin
         arguments: [~, App\Entity\Category, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, label: Category }
+            - { name: sonata.admin, manager_type: orm, label: admin.category }
 
     admin.post:
         class: App\Admin\PostAdmin
         arguments: [~, App\Entity\Post, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, label: Post }
+            - { name: sonata.admin, manager_type: orm, label: admin.post }
 
     admin.user:
         class: App\Admin\UserAdmin
         arguments: [~, App\Entity\User, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, label: User }
+            - { name: sonata.admin, manager_type: orm, label: admin.user }
 
     admin.tag:
         class: App\Admin\TagAdmin
         arguments: [~, App\Entity\Tag, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, label: Tags }
+            - { name: sonata.admin, manager_type: orm, label: admin.tags }

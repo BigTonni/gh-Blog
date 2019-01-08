@@ -4,14 +4,14 @@
         <section>
             <div class="input-append">
                 <form action="{{ path('post_search') }}">
-                    <input minlength="2" name="q" placeholder="Search query" id="appendedInputButton" size="16" type="text">
+                    <input minlength="2" name="q" placeholder="{{ 'content.search_query' |trans }}" id="appendedInputButton" size="16" type="text">
                     <button class="btn" type="submit"><i class="icon-search"></i></button>
                 </form>
             </div>
         </section>
 
         <!--Categories-->
-        <h5 class="title-bg">Categories</h5>
+        <h5 class="title-bg">{{ 'content.categories'|trans }}</h5>
         <ul class="post-category-list">
             {% if categories %}
                 {% for category in categories %}

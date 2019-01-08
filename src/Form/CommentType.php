@@ -16,9 +16,11 @@ class CommentType extends AbstractType
         $builder
             ->add('content', TextareaType::class, [
                 'attr' => ['class' => 'span6'],
+                'label' => false,
             ])
             ->add('Post My Comment', SubmitType::class, [
                 'attr' => ['class' => 'btn btn-inverse'],
+                'label' => 'post.button_new_comment',
             ])
         ;
     }

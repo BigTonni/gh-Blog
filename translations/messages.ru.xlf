@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" target-language="ru" datatype="plaintext" original="file.ext">
+    <header>
+      <tool tool-id="symfony" tool-name="Symfony"/>
+    </header>
+    <body>
+        <!--Menu-->
+        <trans-unit id="menu.home" resname="menu.home">
+            <source>menu.home</source>
+            <target>Главная</target>
+        </trans-unit>
+        <trans-unit id="menu.login" resname="menu.login">
+            <source>menu.login</source>
+            <target>Вход</target>
+        </trans-unit>
+        <trans-unit id="menu.register" resname="menu.register">
+            <source>menu.register</source>
+            <target>Регистрация</target>
+        </trans-unit>
+        <trans-unit id="menu.admin_panel" resname="menu.admin_panel">
+            <source>menu.admin_panel</source>
+            <target>Админ панель</target>
+        </trans-unit>
+        <trans-unit id="menu.create_post" resname="menu.create_post">
+            <source>menu.create_post</source>
+            <target>Создать пост</target>
+        </trans-unit>
+        <trans-unit id="menu.my_posts" resname="menu.my_posts">
+            <source>menu.my_posts</source>
+            <target>Мои посты</target>
+        </trans-unit>
+        <trans-unit id="menu.logout" resname="menu.logout">
+            <source>menu.logout</source>
+            <target>Выход</target>
+        </trans-unit>
+        <!--Menu END-->
+
+        <!--Content-->
+        <trans-unit id="content.categories" resname="content.categories">
+            <source>content.categories</source>
+            <target>Категории</target>
+        </trans-unit>
+        <trans-unit id="content.search_query" resname="content.search_query">
+            <source>content.search_query</source>
+            <target>Поисковый запрос</target>
+        </trans-unit>
+        <trans-unit id="content.button_back_to_top" resname="content.button_back_to_top">
+            <source>content.button_back_to_top</source>
+            <target>Back to Top</target>
+        </trans-unit>
+        <!--Content END-->
+
+        <!--Post-->
+        <trans-unit id="post.title" resname="post.title">
+            <source>post.title</source>
+            <target>Заголовок</target>
+        </trans-unit>
+        <trans-unit id="post.content" resname="post.content">
+            <source>post.content</source>
+            <target>Содержание</target>
+        </trans-unit>
+        <trans-unit id="post.category" resname="post.category">
+            <source>post.category</source>
+            <target>Категория</target>
+        </trans-unit>
+        <trans-unit id="post.tags" resname="post.tags">
+            <source>post.tags</source>
+            <target>Теги</target>
+        </trans-unit>
+        <trans-unit id="post.button_save" resname="post.button_save">
+            <source>post.button_save</source>
+            <target>Опубликовать</target>
+        </trans-unit>
+      <trans-unit id="post.edit" resname="post.edit">
+          <source>post.edit</source>
+          <target>Редактировать</target>
+      </trans-unit>
+      <trans-unit id="post.delete" resname="post.delete">
+          <source>post.delete</source>
+          <target>Удалить</target>
+      </trans-unit>
+        <trans-unit id="post.delete_confirm" resname="post.delete_confirm">
+            <source>post.delete_confirm</source>
+            <target>Вы действительно хотите удалить этот пост?</target>
+        </trans-unit>
+        <trans-unit id="post.comment_count" resname="post.comment_count">
+            <source>post.comment_count</source>
+            <target>Комментарии: %count%</target>
+        </trans-unit>
+        <trans-unit id="post.comment_form_title" resname="post.comment_form_title">
+            <source>post.comment_form_title</source>
+            <target>Напишите Ваш комментарий</target>
+        </trans-unit>
+        <trans-unit id="post.button_new_comment" resname="post.button_new_comment">
+            <source>post.button_new_comment</source>
+            <target>Опубликовать мой комментарий</target>
+        </trans-unit>
+        <trans-unit id="post.button_read_more" resname="post.button_read_more">
+            <source>post.button_read_more</source>
+            <target>Читать далее</target>
+        </trans-unit>
+        <!--Post END-->
+
+        <!--Registration-->
+        <trans-unit id="registration.title" resname="registration.title">
+            <source>registration.title</source>
+            <target>Регистрация</target>
+        </trans-unit>
+        <trans-unit id="registration.email" resname="registration.email">
+            <source>registration.email</source>
+            <target>Ваш E-mail</target>
+        </trans-unit>
+        <trans-unit id="registration.fullName" resname="registration.fullName">
+            <source>registration.fullName</source>
+            <target>Ваше Полное Имя</target>
+        </trans-unit>
+        <trans-unit id="registration.password" resname="registration.password">
+            <source>registration.password</source>
+            <target>Ваш Пароль</target>
+        </trans-unit>
+        <trans-unit id="registration.repeat_password" resname="registration.repeat_password">
+            <source>registration.repeat_password</source>
+            <target>Повторите Ваш Пароль</target>
+        </trans-unit>
+        <trans-unit id="registration.button_register" resname="registration.button_register">
+            <source>registration.button_register</source>
+            <target>Зарегистрироваться</target>
+        </trans-unit>
+        <!--Registration END-->
+
+        <!--Login-->
+        <trans-unit id="login.title" resname="login.title">
+            <source>login.title</source>
+            <target>Пожалуйста войдите</target>
+        </trans-unit>
+        <trans-unit id="login.email" resname="login.email">
+            <source>login.email</source>
+            <target>Ваш E-mail</target>
+        </trans-unit>
+        <trans-unit id="login.password" resname="login.password">
+            <source>login.password</source>
+            <target>Ваш Пароль</target>
+        </trans-unit>
+        <trans-unit id="login.placeholder_email" resname="login.placeholder_email">
+            <source>login.placeholder_email</source>
+            <target>Введите Ваш E-mail</target>
+        </trans-unit>
+        <trans-unit id="login.placeholder_password" resname="login.placeholder_password">
+            <source>login.placeholder_password</source>
+            <target>Введите Ваш Пароль</target>
+        </trans-unit>
+        <trans-unit id="login.button_login" resname="login.button_login">
+            <source>login.button_login</source>
+            <target>Войти</target>
+        </trans-unit>
+        <!--Login END-->
+
+        <!--Admin-->
+        <trans-unit id="admin.category" resname="admin.category">
+            <source>admin.category</source>
+            <target>Категории</target>
+        </trans-unit>
+        <trans-unit id="admin.post" resname="admin.post">
+            <source>admin.post</source>
+            <target>Посты</target>
+        </trans-unit>
+        <trans-unit id="admin.user" resname="admin.user">
+            <source>admin.user</source>
+            <target>Пользователи</target>
+        </trans-unit>
+        <trans-unit id="admin.tags" resname="admin.tags">
+            <source>admin.tags</source>
+            <target>Теги</target>
+        </trans-unit>
+        <!--Admin END-->
+
+    </body>
+  </file>
+</xliff>
