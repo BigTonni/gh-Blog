@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Category;
 use App\Entity\Post;
+use App\Form\Type\TagsInputType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -27,6 +28,11 @@ class PostType extends AbstractType
                 'class' => Category::class,
                 'choice_label' => 'name',
                 'attr' => ['class' => 'span6'],
+            ])
+            ->add('tags', TagsInputType::class, [
+                'label' => 'Tags',
+                'attr' => ['class' => 'span6'],
+                'required' => false,
             ])
             ->add('save', SubmitType::class, [
                 'attr' => ['class' => 'btn btn-inverse'],

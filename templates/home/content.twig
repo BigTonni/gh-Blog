@@ -28,7 +28,9 @@
                         <li><a href="{{ path('post_like', {'slug': post.slug}) }}"><i class="icon-heart"></i>{{ post.like }}</a></li>
                         <li><i class="icon-calendar"></i>{{ post.createdAt | date('Y-m-d') }}</li>
                         <li><i class="icon-user"></i> <a href="{{ path('author_posts_show', {'slug': post.author.slug}) }}">{{ post.author.fullname | title }}</a></li>
-                        <li><a href="{{ path('posts_in_category_show', {'slug': post.category.slug}) }}"><i class="icon-plus-sign"></i>{{ post.category.name }}</a></li>
+
+                        {{ include('tag/show.html.twig') }}
+
                     </ul>
                 </div>
             </div>

@@ -1,0 +1,7 @@
+{% for tag in post.tags %}
+    <li>
+        <a href="{{ path('posts_with_tag_show', {'slug': tag.slug}) }}"><i class="icon-tags"></i>
+            {{ tag }}
+        </a>
+    </li>
+{% endfor %}

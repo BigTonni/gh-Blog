@@ -55,3 +55,9 @@ services:
         arguments: [~, App\Entity\User, ~]
         tags:
             - { name: sonata.admin, manager_type: orm, label: User }
+
+    admin.tag:
+        class: App\Admin\TagAdmin
+        arguments: [~, App\Entity\Tag, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: Tags }

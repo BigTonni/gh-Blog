@@ -35,6 +35,7 @@ class PostRepository extends ServiceEntityRepository
             ->innerJoin('p.category', 'c')
             ->where('c.id IN (:id)')
             ->setParameter(':id', $id)
+            ->orderBy('c.name', 'DESC')
             ->getQuery()
             ->getResult();
     }
@@ -50,12 +51,32 @@ class PostRepository extends ServiceEntityRepository
             ->innerJoin('p.author', 'u')
             ->where('u.id IN (:id)')
             ->setParameter(':id', $id)
+            ->orderBy('u.email', 'DESC')
             ->getQuery()
             ->getResult();
     }
 
     /**
-     * @return Post[]
+     * @param $id
+     *
+     * @return mixed
+     */
+    public function findPostsByTagId($id)
+    {
+        return $this->createQueryBuilder('p')
+            ->innerJoin('p.tags', 't')
+            ->where('t.id IN (:id)')
+            ->setParameter(':id', $id)
+            ->orderBy('t.name', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @param string $rawQuery
+     * @param int    $limit
+     *
+     * @return array
      */
     public function findBySearchQuery(string $rawQuery, int $limit = Post::NUM_ITEMS): array
     {
