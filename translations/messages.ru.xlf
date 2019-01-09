@@ -53,6 +53,14 @@
             <source>content.button_back_to_top</source>
             <target>Back to Top</target>
         </trans-unit>
+        <trans-unit id="content.change_locale" resname="content.change_locale">
+            <source>content.change_locale</source>
+            <target>Изменить язык сайта</target>
+        </trans-unit>
+        <trans-unit id="content.homepage_title" resname="content.homepage_title">
+            <source>content.homepage_title</source>
+            <target>Домашняя страница</target>
+        </trans-unit>
         <!--Content END-->
 
         <!--Post-->
@@ -104,7 +112,38 @@
             <source>post.button_read_more</source>
             <target>Читать далее</target>
         </trans-unit>
+        <trans-unit id="post.all_posts_title" resname="post.all_posts_title">
+            <source>post.all_posts_title</source>
+            <target>Все посты</target>
+        </trans-unit>
+        <trans-unit id="post.posts_in_category_title" resname="post.posts_in_category_title">
+            <source>post.posts_in_category_title</source>
+            <target>Посты в категории</target>
+        </trans-unit>
+        <trans-unit id="post.author_posts_title" resname="post.author_posts_title">
+            <source>post.author_posts_title</source>
+            <target>Посты автора - </target>
+        </trans-unit>
+        <trans-unit id="post.posts_with_tag_title" resname="post.posts_with_tag_title">
+            <source>post.posts_with_tag_title</source>
+            <target>Посты с тегом -</target>
+        </trans-unit>
+        <trans-unit id="post.create_title" resname="post.create_title">
+            <source>post.create_title</source>
+            <target>Создание нового поста</target>
+        </trans-unit>
+        <trans-unit id="post.edit_title" resname="post.edit_title">
+            <source>post.edit_title</source>
+            <target>Редактирование поста</target>
+        </trans-unit>
         <!--Post END-->
+
+        <!--Search-->
+        <trans-unit id="search.search_title" resname="search.search_title">
+            <source>search.search_title</source>
+            <target>Поиск по запросу - </target>
+        </trans-unit>
+        <!--Search END-->
 
         <!--Registration-->
         <trans-unit id="registration.title" resname="registration.title">
@@ -178,6 +217,33 @@
             <target>Теги</target>
         </trans-unit>
         <!--Admin END-->
+
+        <!--Exception-->
+        <trans-unit id="exception.no_posts" resname="exception.no_posts">
+            <source>exception.no_posts</source>
+            <target>Постов пока нет</target>
+        </trans-unit>
+        <trans-unit id="exception.no_posts_in_category" resname="exception.no_posts_in_category">
+            <source>exception.no_posts_in_category</source>
+            <target>В этой категории нет постов</target>
+        </trans-unit>
+        <trans-unit id="exception.author_no_posts" resname="exception.author_no_posts">
+            <source>exception.author_no_posts</source>
+            <target>У данного автора нет постов</target>
+        </trans-unit>
+        <trans-unit id="exception.you_no_posts" resname="exception.you_no_posts">
+            <source>exception.you_no_posts</source>
+            <target>У вас нет постов</target>
+        </trans-unit>
+        <trans-unit id="exception.no_posts_with_tag" resname="exception.no_posts_with_tag">
+            <source>exception.no_posts_with_tag</source>
+            <target>Нет постов с этим тегом</target>
+        </trans-unit>
+        <trans-unit id="exception.search_query_not_result" resname="exception.search_query_not_result">
+            <source>exception.search_query_not_result</source>
+            <target>По данному запросу ничего не найдено</target>
+        </trans-unit>
+        <!--Exception END-->
 
     </body>
   </file>

@@ -1,2 +1,3 @@
 app_logout:
-    path: /logout
+    path: /{_locale}/logout
+    defaults:   { _locale: en }
