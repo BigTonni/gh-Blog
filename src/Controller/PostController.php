@@ -12,10 +12,12 @@ use App\Entity\Post;
 use App\Repository\PostRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Sonata\AdminBundle\Admin\BreadcrumbsBuilderInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
 
 /**
  * Class PostController.
@@ -42,19 +44,27 @@ class PostController extends AbstractController
         ]);
     }
 
+
     /**
      * @param Post $post
-     *
+     * @param Breadcrumbs $breadcrumbs
      * @return Response
-     *
      * @throws \Doctrine\ORM\NonUniqueResultException
-     *
+     * 
      * @Route("/post/show/{slug}", name="post_show")
      */
-    public function show(Post $post): Response
+    public function show(Post $post, Breadcrumbs $breadcrumbs): Response
     {
         $em = $this->getDoctrine()->getManager();
         $countComment = $em->getRepository(Comment::class)->getCountCommentForPost($post->getId());
+
+        $breadcrumbs->prependRouteItem('menu.home', 'home');
+        $breadcrumbs->addRouteItem($post->getCategory()->getName(), 'posts_in_category_show', [
+            'slug' => $post->getCategory()->getSlug(),
+            ]);
+        $breadcrumbs->addRouteItem($post->getTitle(), 'post_show', [
+            'slug' => $post->getSlug(),
+        ]);
 
         return $this->render('post/show.html.twig', [
             'post' => $post,
