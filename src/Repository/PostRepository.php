@@ -25,6 +25,21 @@ class PostRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param $limit
+     *
+     * @return mixed
+     */
+    public function findLatest($limit)
+    {
+        return $this->createQueryBuilder('p')
+            ->select('p')
+            ->orderBy('p.createdAt', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
      * @param $id
      *
      * @return mixed

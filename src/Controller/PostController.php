@@ -15,6 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
 
 /**
  * Class PostController.
@@ -22,7 +23,28 @@ use Symfony\Component\Routing\Annotation\Route;
 class PostController extends AbstractController
 {
     /**
-     * @param Post $post
+     * @param Request            $request
+     * @param PaginatorInterface $paginator
+     *
+     * @return Response
+     *
+     * @Route("/post/all/", name="posts_all_show")
+     */
+    public function showAll(Request $request, PaginatorInterface $paginator): Response
+    {
+        $em = $this->getDoctrine()->getManager();
+        $postsQuery = $em->getRepository(Post::class)->createQueryBuilder('p')->getQuery();
+        $posts = $paginator->paginate($postsQuery, $request->query->getInt('page', 1), 10);
+
+        return $this->render('home/content.twig', [
+            'title' => 'Show Posts',
+            'posts' => $posts,
+        ]);
+    }
+
+    /**
+     * @param Post        $post
+     * @param Breadcrumbs $breadcrumbs
      *
      * @return Response
      *
@@ -30,10 +52,18 @@ class PostController extends AbstractController
      *
      * @Route("/post/show/{slug}", name="post_show")
      */
-    public function show(Post $post): Response
+    public function show(Post $post, Breadcrumbs $breadcrumbs): Response
     {
         $em = $this->getDoctrine()->getManager();
         $countComment = $em->getRepository(Comment::class)->getCountCommentForPost($post->getId());
+
+        $breadcrumbs->prependRouteItem('menu.home', 'home');
+        $breadcrumbs->addRouteItem($post->getCategory()->getName(), 'posts_in_category_show', [
+            'slug' => $post->getCategory()->getSlug(),
+            ]);
+        $breadcrumbs->addRouteItem($post->getTitle(), 'post_show', [
+            'slug' => $post->getSlug(),
+        ]);
 
         return $this->render('post/show.html.twig', [
             'post' => $post,

@@ -10,6 +10,10 @@
             <source>menu.home</source>
             <target>Home</target>
         </trans-unit>
+        <trans-unit id="menu.all_posts" resname="menu.all_posts">
+            <source>menu.all_posts</source>
+            <target>All Posts</target>
+        </trans-unit>
         <trans-unit id="menu.login" resname="menu.login">
             <source>menu.login</source>
             <target>Login</target>
