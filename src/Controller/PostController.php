@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Tag;
+use App\Form\PostFilterType;
 use App\Form\PostType;
 use App\Entity\User;
 use App\Entity\Category;
@@ -21,6 +22,26 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class PostController extends AbstractController
 {
+
+    /**
+     * @param Request $request
+     * @param PaginatorInterface $paginator
+     * @return Response
+     *
+     * @Route("/post/all/", name="posts_all_show")
+     */
+    public function showAll(Request $request, PaginatorInterface $paginator): Response
+    {
+        $em = $this->getDoctrine()->getManager();
+        $postsQuery = $em->getRepository(Post::class)->createQueryBuilder('p')->getQuery();
+        $posts = $paginator->paginate($postsQuery, $request->query->getInt('page', 1), 10);
+
+        return $this->render('home/content.twig', [
+            'title' => 'Show Posts',
+            'posts' => $posts,
+        ]);
+    }
+
     /**
      * @param Post $post
      *

@@ -27,11 +27,11 @@ class HomeController extends AbstractController
     {
         $em = $this->getDoctrine()->getManager();
 
-        $postsQuery = $em->getRepository(Post::class)->createQueryBuilder('p')->getQuery();
+        $postsQuery = $em->getRepository(Post::class)->findLatest(10);
         $posts = $paginator->paginate($postsQuery, $request->query->getInt('page', 1));
 
         return $this->render('home/content.twig', [
-            'title' => 'Show Posts',
+            'title' => 'Home Page',
             'posts' => $posts,
         ]);
     }

@@ -46,6 +46,10 @@ class MenuBuilder
             ->setAttributes([
                     'class' => 'nav-item', ]
             );
+        $menu->addChild('menu.all_posts', ['route' => 'posts_all_show'])
+            ->setAttributes([
+                    'class' => 'nav-item', ]
+            );
 
         if (!$this->checker->isGranted('IS_AUTHENTICATED_FULLY')) {
             $menu->addChild('menu.login', ['route' => 'app_login'])
