@@ -4,7 +4,8 @@
         <section>
             <div class="input-append">
                 <form action="{{ path('post_search') }}">
-                    <input minlength="2" name="q" placeholder="{{ 'content.search_query' |trans }}" id="appendedInputButton" size="16" type="text">
+                    <input minlength="2" name="q" placeholder="{{ 'content.search_query' |trans }}"
+                           id="appendedInputButton" size="16" type="text">
                     <button class="btn" type="submit"><i class="icon-search"></i></button>
                 </form>
             </div>
@@ -19,6 +20,12 @@
                                     class="icon-plus-sign"></i>{{ category.name }}</a></li>
                 {% endfor %}
             {% endif %}
+        </ul>
+
+        <h5 class="title-bg">{{ 'content.change_locale' |trans }}</h5>
+        <ul class="post-category-list">
+            <li><a href="{{ path('home', { '_locale': 'en' } ) }}"><i class="icon-plus-sign"></i>English</a></li>
+            <li><a href="{{ path('home', { '_locale': 'ru' } ) }}"><i class="icon-plus-sign"></i>Русский</a></li>
         </ul>
     </div>
 {% endblock %}

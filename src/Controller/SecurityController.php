@@ -23,7 +23,7 @@ class SecurityController extends AbstractController
      *
      * @return Response
      *
-     * @Route("/login", name="app_login")
+     * @Route("{_locale}/login", defaults={"_locale": "en"}, name="app_login")
      */
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
@@ -43,7 +43,7 @@ class SecurityController extends AbstractController
      *
      * @return Response
      *
-     * @Route("/register", name="app_register")
+     * @Route("{_locale}/register", defaults={"_locale": "en"}, name="app_register")
      */
     public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $authenticator): Response
     {

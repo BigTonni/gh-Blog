@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class PostController.
@@ -23,21 +24,35 @@ use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
 class PostController extends AbstractController
 {
     /**
+     * @var
+     */
+    private $translator;
+
+    public function __construct(TranslatorInterface $translator)
+    {
+        $this->translator = $translator;
+    }
+
+    /**
      * @param Request            $request
      * @param PaginatorInterface $paginator
      *
      * @return Response
      *
-     * @Route("/post/all/", name="posts_all_show")
+     * @Route("/{_locale}/post/all/", defaults={"_locale": "en"}, name="posts_all_show")
      */
     public function showAll(Request $request, PaginatorInterface $paginator): Response
     {
         $em = $this->getDoctrine()->getManager();
         $postsQuery = $em->getRepository(Post::class)->createQueryBuilder('p')->getQuery();
-        $posts = $paginator->paginate($postsQuery, $request->query->getInt('page', 1), 10);
+        $posts = $paginator->paginate($postsQuery, $request->query->getInt('page', 1), Post::NUM_ITEMS);
+
+        if (!$postsQuery) {
+            throw $this->createNotFoundException($this->translator->trans('exception.no_posts'));
+        }
 
         return $this->render('home/content.twig', [
-            'title' => 'Show Posts',
+            'title' => $this->translator->trans('post.all_posts_title'),
             'posts' => $posts,
         ]);
     }
@@ -50,7 +65,7 @@ class PostController extends AbstractController
      *
      * @throws \Doctrine\ORM\NonUniqueResultException
      *
-     * @Route("/post/show/{slug}", name="post_show")
+     * @Route("/{_locale}/post/show/{slug}", defaults={"_locale": "en"}, name="post_show")
      */
     public function show(Post $post, Breadcrumbs $breadcrumbs): Response
     {
@@ -68,6 +83,7 @@ class PostController extends AbstractController
         return $this->render('post/show.html.twig', [
             'post' => $post,
             'countComment' => $countComment,
+            'title' => $post->getTitle(),
         ]);
     }
 
@@ -78,7 +94,7 @@ class PostController extends AbstractController
      *
      * @return Response
      *
-     * @Route("/category/{slug}", name="posts_in_category_show")
+     * @Route("/{_locale}/category/{slug}", defaults={"_locale": "en"}, name="posts_in_category_show")
      */
     public function showPostsInCategory(Request $request, PaginatorInterface $paginator, Category $category): Response
     {
@@ -86,13 +102,13 @@ class PostController extends AbstractController
         $query = $em->getRepository(Post::class)->findPostsByCategoryId($category->getId());
 
         if (!$query) {
-            throw $this->createNotFoundException('There are no posts in this category');
+            throw $this->createNotFoundException($this->translator->trans('exception.no_posts_in_category'));
         }
 
         $posts = $paginator->paginate($query, $request->query->getInt('page', 1));
 
         return $this->render('home/content.twig', [
-            'title' => 'Show Post in Category '.$category->getName(),
+            'title' => $this->translator->trans('post.posts_in_category_title').' '.$category->getName(),
             'posts' => $posts,
         ]);
     }
@@ -104,7 +120,7 @@ class PostController extends AbstractController
      *
      * @return Response
      *
-     * @Route("/author/{slug}", name="author_posts_show")
+     * @Route("/{_locale}/author/{slug}", defaults={"_locale": "en"}, name="author_posts_show")
      */
     public function showAuthorPosts(Request $request, PaginatorInterface $paginator, User $user): Response
     {
@@ -112,13 +128,13 @@ class PostController extends AbstractController
         $query = $em->getRepository(Post::class)->findPostsByAuthorId($user->getId());
 
         if (!$query) {
-            throw $this->createNotFoundException('There are no posts in this author');
+            throw $this->createNotFoundException($this->translator->trans('exception.author_no_posts'));
         }
 
         $posts = $paginator->paginate($query, $request->query->getInt('page', 1));
 
         return $this->render('home/content.twig', [
-            'title' => 'View author posts '.$user->getFullName(),
+            'title' => $this->translator->trans('post.author_posts_title').' '.$user->getFullName(),
             'posts' => $posts,
         ]);
     }
@@ -128,7 +144,7 @@ class PostController extends AbstractController
      * @param PaginatorInterface $paginator
      *
      * @return Response
-     * @Route("/post/my", name="show_my_posts")
+     * @Route("/{_locale}/post/my", defaults={"_locale": "en"}, name="show_my_posts")
      */
     public function showMyPosts(Request $request, PaginatorInterface $paginator): Response
     {
@@ -136,13 +152,13 @@ class PostController extends AbstractController
         $query = $em->getRepository(Post::class)->findPostsByAuthorId($this->getUser()->getId());
 
         if (!$query) {
-            throw $this->createNotFoundException('You have no posts');
+            throw $this->createNotFoundException($this->translator->trans('exception.you_no_posts'));
         }
 
         $posts = $paginator->paginate($query, $request->query->getInt('page', 1));
 
         return $this->render('home/content.twig', [
-            'title' => 'View author posts '.$this->getUser()->getFullName(),
+            'title' => $this->translator->trans('post.author_posts_title').' '.$this->getUser()->getFullName(),
             'posts' => $posts,
         ]);
     }
@@ -154,7 +170,7 @@ class PostController extends AbstractController
      *
      * @return Response
      *
-     * @Route("/tag/{slug}", name="posts_with_tag_show")
+     * @Route("/{_locale}/tag/{slug}", defaults={"_locale": "en"}, name="posts_with_tag_show")
      */
     public function showPostsWithTag(Request $request, PaginatorInterface $paginator, Tag $tag): Response
     {
@@ -162,13 +178,13 @@ class PostController extends AbstractController
         $query = $em->getRepository(Post::class)->findPostsByTagId($tag->getId());
 
         if (!$query) {
-            throw $this->createNotFoundException('There are no posts with this tag.');
+            throw $this->createNotFoundException($this->translator->trans('exception.no_posts_with_tag'));
         }
 
         $posts = $paginator->paginate($query, $request->query->getInt('page', 1));
 
         return $this->render('home/content.twig', [
-            'title' => 'View Posts Tagged With - '.$tag->getName(),
+            'title' => $this->translator->trans('post.posts_with_tag_title').' '.$tag->getName(),
             'posts' => $posts,
         ]);
     }
@@ -179,7 +195,7 @@ class PostController extends AbstractController
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      *
      * @IsGranted("ROLE_ADMIN")
-     * @Route("/post/new", name="post_new")
+     * @Route("/{_locale}/post/new", defaults={"_locale": "en"}, name="post_new")
      */
     public function new(Request $request): Response
     {
@@ -202,7 +218,7 @@ class PostController extends AbstractController
 
         return $this->render('post/new.html.twig', [
             'form' => $form->createView(),
-            'title' => 'Create New Post',
+            'title' => $this->translator->trans('post.create_title'),
         ]);
     }
 
@@ -213,7 +229,7 @@ class PostController extends AbstractController
      * @return Response
      *
      * @IsGranted("ROLE_ADMIN")
-     * @Route("post/edit/{slug}", name="post_edit")
+     * @Route("/{_locale}/post/edit/{slug}", defaults={"_locale": "en"}, name="post_edit")
      */
     public function edit(Request $request, Post $post): Response
     {
@@ -233,6 +249,7 @@ class PostController extends AbstractController
         return $this->render('post/edit.html.twig', [
             'post' => $post,
             'form' => $form->createView(),
+            'title' => $this->translator->trans('post.edit_title'),
         ]);
     }
 
@@ -242,7 +259,7 @@ class PostController extends AbstractController
      * @return Response
      *
      * @IsGranted("ROLE_ADMIN")
-     * @Route("post/delete/{slug}", name="post_delete")
+     * @Route("/{_locale}/post/delete/{slug}", defaults={"_locale": "en"}, name="post_delete")
      */
     public function delete(Post $post): Response
     {
@@ -264,7 +281,7 @@ class PostController extends AbstractController
      *
      * @return Response
      *
-     * @Route("post/search", methods={"GET"}, name="post_search")
+     * @Route("/{_locale}/post/search", defaults={"_locale": "en"}, methods={"GET"}, name="post_search")
      */
     public function search(Request $request, PostRepository $postRepository, PaginatorInterface $paginator): Response
     {
@@ -272,13 +289,14 @@ class PostController extends AbstractController
             $request->query->get('l', 10));
 
         if (!$query) {
-            throw $this->createNotFoundException('The post does not exist');
+            throw $this->createNotFoundException($this->translator->trans('exception.search_query_not_result'));
         }
 
         $posts = $paginator->paginate($query, $request->query->getInt('page', 1));
 
         return $this->render('post/search.html.twig', [
             'posts' => $posts,
+            'title' => $this->translator->trans('search.search_title').' '.$request->query->get('q'),
         ]);
     }
 
@@ -288,7 +306,7 @@ class PostController extends AbstractController
      * @return Response
      *
      * @IsGranted("ROLE_USER")
-     * @Route("post/like/{slug}", name="post_like")
+     * @Route("/{_locale}/post/like/{slug}", defaults={"_locale": "en"}, name="post_like")
      */
     public function like(Post $post): Response
     {

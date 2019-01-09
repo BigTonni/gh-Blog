@@ -23,7 +23,7 @@ class CommentController extends AbstractController
      * @return Response
      *
      * @IsGranted("ROLE_USER")
-     * @Route("/comment/{slug}/new", methods={"POST"}, name="comment_create")
+     * @Route("/{_locale}/comment/{slug}/new", defaults={"_locale": "en"}, methods={"POST"}, name="comment_create")
      */
     public function new(Request $request, Post $post): Response
     {
@@ -44,7 +44,6 @@ class CommentController extends AbstractController
 
         return $this->render('comment/create.html.twig', [
             'form' => $form->createView(),
-            'title' => 'Create New Comment',
             'post' => $post,
         ]);
     }
