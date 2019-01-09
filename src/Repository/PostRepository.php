@@ -26,6 +26,7 @@ class PostRepository extends ServiceEntityRepository
 
     /**
      * @param $limit
+     *
      * @return mixed
      */
     public function findLatest($limit)

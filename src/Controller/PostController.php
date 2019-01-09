@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Tag;
-use App\Form\PostFilterType;
 use App\Form\PostType;
 use App\Entity\User;
 use App\Entity\Category;
@@ -12,7 +11,6 @@ use App\Entity\Post;
 use App\Repository\PostRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Sonata\AdminBundle\Admin\BreadcrumbsBuilderInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,10 +22,10 @@ use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
  */
 class PostController extends AbstractController
 {
-
     /**
-     * @param Request $request
+     * @param Request            $request
      * @param PaginatorInterface $paginator
+     *
      * @return Response
      *
      * @Route("/post/all/", name="posts_all_show")
@@ -44,13 +42,14 @@ class PostController extends AbstractController
         ]);
     }
 
-
     /**
-     * @param Post $post
+     * @param Post        $post
      * @param Breadcrumbs $breadcrumbs
+     *
      * @return Response
+     *
      * @throws \Doctrine\ORM\NonUniqueResultException
-     * 
+     *
      * @Route("/post/show/{slug}", name="post_show")
      */
     public function show(Post $post, Breadcrumbs $breadcrumbs): Response
