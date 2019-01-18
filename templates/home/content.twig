@@ -26,7 +26,6 @@
                         {{ 'post.button_read_more'|trans }}
                     </button>
                     <ul class="post-data">
-                        <li><a href="{{ path('post_like', {'slug': post.slug}) }}"><i class="icon-heart"></i>{{ post.like }}</a></li>
                         <li><i class="icon-calendar"></i>{{ post.createdAt | date('Y-m-d') }}</li>
                         <li><i class="icon-user"></i> <a href="{{ path('author_posts_show', {'slug': post.author.slug}) }}">{{ post.author.fullname | title }}</a></li>
 
