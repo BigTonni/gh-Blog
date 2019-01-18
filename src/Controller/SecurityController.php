@@ -65,15 +65,15 @@ class SecurityController extends AbstractController
                 )
             );
 
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
-            $entityManager->flush();
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
 
             return $guardHandler->authenticateUserAndHandleSuccess(
                 $user,
                 $request,
                 $authenticator,
-                'main' // firewall name in security.yaml
+                'main'
             );
         }
 

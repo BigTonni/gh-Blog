@@ -71,7 +71,7 @@ class Post
     private $category;
 
     /**
-     * @ORM\OneToMany(targetEntity="Comment", mappedBy="post", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="post", orphanRemoval=true, cascade={"persist"})
      * @ORM\OrderBy({"publishedAt": "DESC"})
      * @Assert\NotNull()
      */
@@ -99,7 +99,7 @@ class Post
     private $tags;
 
     /**
-     * @ORM\OneToMany(targetEntity="Like", mappedBy="post", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Like", mappedBy="post", orphanRemoval=true, cascade={"persist"})
      * @Assert\NotNull()
      */
     private $likes;
