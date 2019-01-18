@@ -19,7 +19,7 @@ class Comment
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Post", inversedBy="comments")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Post", inversedBy="comments")
      * @ORM\JoinColumn(nullable=false)
      * @Assert\NotNull()
      */

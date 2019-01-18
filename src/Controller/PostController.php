@@ -9,7 +9,6 @@ use App\Entity\User;
 use App\Entity\Category;
 use App\Entity\Comment;
 use App\Entity\Post;
-use App\Repository\PostRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -281,76 +280,6 @@ class PostController extends AbstractController
         $em->flush();
 
         return $this->redirectToRoute('home');
-    }
-
-    /**
-     * @param Request            $request
-     * @param PostRepository     $postRepository
-     * @param PaginatorInterface $paginator
-     *
-     * @return Response
-     *
-     * @Route("/{_locale}/post/search", defaults={"_locale": "en"}, methods={"GET"}, name="post_search")
-     */
-    public function search(Request $request, PostRepository $postRepository, PaginatorInterface $paginator): Response
-    {
-        $query = $postRepository->findBySearchQuery($request->query->get('q', ''),
-            $request->query->get('l', 10));
-
-        if (!$query) {
-            throw $this->createNotFoundException($this->translator->trans('exception.search_query_not_result'));
-        }
-
-        $posts = $paginator->paginate($query, $request->query->getInt('page', 1), Post::NUM_ITEMS);
-
-        return $this->render('post/search.html.twig', [
-            'posts' => $posts,
-            'title' => $this->translator->trans('search.search_title').' '.$request->query->get('q'),
-        ]);
-    }
-
-    /**
-     * @param Post $post
-     *
-     * @return Response
-     *
-     * @IsGranted("ROLE_USER")
-     * @Route("/{_locale}/post/like/{slug}", defaults={"_locale": "en"}, name="post_like")
-     */
-    public function like(Post $post): Response
-    {
-        $em = $this->getDoctrine()->getManager();
-        $likes = $post->getLikes();
-
-        if ($likes->isEmpty()) {
-            $like = new Like();
-            $like->setUser($this->getUser());
-            $post->addLike($like);
-
-            $em->persist($post);
-        } else {
-            $isDeleted = false;
-            foreach ($likes as $like) {
-                if ($like->getUser() === $this->getUser()) {
-                    $post->removeLike($like);
-                    $em->persist($post);
-
-                    $isDeleted = true;
-                }
-            }
-
-            if (!$isDeleted) {
-                $like = new Like();
-                $like->setUser($this->getUser());
-                $post->addLike($like);
-
-                $em->persist($post);
-            }
-        }
-
-        $em->flush();
-
-        return $this->redirectToRoute('post_show', ['slug' => $post->getSlug()]);
     }
 
     /**

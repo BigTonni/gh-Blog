@@ -19,7 +19,7 @@ class Like
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Post", inversedBy="likes")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Post", inversedBy="likes")
      * @ORM\JoinColumn(nullable=false)
      * @Assert\NotNull()
      */
