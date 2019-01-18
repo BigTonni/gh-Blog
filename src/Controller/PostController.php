@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Like;
 use App\Entity\Tag;
 use App\Form\PostType;
 use App\Entity\User;
@@ -28,6 +29,11 @@ class PostController extends AbstractController
      */
     private $translator;
 
+    /**
+     * PostController constructor.
+     *
+     * @param TranslatorInterface $translator
+     */
     public function __construct(TranslatorInterface $translator)
     {
         $this->translator = $translator;
@@ -39,7 +45,7 @@ class PostController extends AbstractController
      *
      * @return Response
      *
-     * @Route("/{_locale}/post/all/", defaults={"_locale": "en"}, name="posts_all_show")
+     * @Route("/{_locale}/post/all", defaults={"_locale": "en"}, name="posts_all_show")
      */
     public function showAll(Request $request, PaginatorInterface $paginator): Response
     {
@@ -71,11 +77,12 @@ class PostController extends AbstractController
     {
         $em = $this->getDoctrine()->getManager();
         $countComment = $em->getRepository(Comment::class)->getCountCommentForPost($post->getId());
+        $countLike = $em->getRepository(Like::class)->getCountLikeForPost($post->getId());
 
         $breadcrumbs->prependRouteItem('menu.home', 'home');
         $breadcrumbs->addRouteItem($post->getCategory()->getName(), 'posts_in_category_show', [
             'slug' => $post->getCategory()->getSlug(),
-            ]);
+        ]);
         $breadcrumbs->addRouteItem($post->getTitle(), 'post_show', [
             'slug' => $post->getSlug(),
         ]);
@@ -83,6 +90,7 @@ class PostController extends AbstractController
         return $this->render('post/show.html.twig', [
             'post' => $post,
             'countComment' => $countComment,
+            'countLike' => $countLike,
             'title' => $post->getTitle(),
         ]);
     }
@@ -105,7 +113,7 @@ class PostController extends AbstractController
             throw $this->createNotFoundException($this->translator->trans('exception.no_posts_in_category'));
         }
 
-        $posts = $paginator->paginate($query, $request->query->getInt('page', 1));
+        $posts = $paginator->paginate($query, $request->query->getInt('page', 1), Post::NUM_ITEMS);
 
         return $this->render('home/content.twig', [
             'title' => $this->translator->trans('post.posts_in_category_title').' '.$category->getName(),
@@ -131,7 +139,7 @@ class PostController extends AbstractController
             throw $this->createNotFoundException($this->translator->trans('exception.author_no_posts'));
         }
 
-        $posts = $paginator->paginate($query, $request->query->getInt('page', 1));
+        $posts = $paginator->paginate($query, $request->query->getInt('page', 1), Post::NUM_ITEMS);
 
         return $this->render('home/content.twig', [
             'title' => $this->translator->trans('post.author_posts_title').' '.$user->getFullName(),
@@ -144,6 +152,7 @@ class PostController extends AbstractController
      * @param PaginatorInterface $paginator
      *
      * @return Response
+     *
      * @Route("/{_locale}/post/my", defaults={"_locale": "en"}, name="show_my_posts")
      */
     public function showMyPosts(Request $request, PaginatorInterface $paginator): Response
@@ -155,7 +164,7 @@ class PostController extends AbstractController
             throw $this->createNotFoundException($this->translator->trans('exception.you_no_posts'));
         }
 
-        $posts = $paginator->paginate($query, $request->query->getInt('page', 1));
+        $posts = $paginator->paginate($query, $request->query->getInt('page', 1), Post::NUM_ITEMS);
 
         return $this->render('home/content.twig', [
             'title' => $this->translator->trans('post.author_posts_title').' '.$this->getUser()->getFullName(),
@@ -181,7 +190,7 @@ class PostController extends AbstractController
             throw $this->createNotFoundException($this->translator->trans('exception.no_posts_with_tag'));
         }
 
-        $posts = $paginator->paginate($query, $request->query->getInt('page', 1));
+        $posts = $paginator->paginate($query, $request->query->getInt('page', 1), Post::NUM_ITEMS);
 
         return $this->render('home/content.twig', [
             'title' => $this->translator->trans('post.posts_with_tag_title').' '.$tag->getName(),
@@ -292,7 +301,7 @@ class PostController extends AbstractController
             throw $this->createNotFoundException($this->translator->trans('exception.search_query_not_result'));
         }
 
-        $posts = $paginator->paginate($query, $request->query->getInt('page', 1));
+        $posts = $paginator->paginate($query, $request->query->getInt('page', 1), Post::NUM_ITEMS);
 
         return $this->render('post/search.html.twig', [
             'posts' => $posts,
@@ -310,10 +319,35 @@ class PostController extends AbstractController
      */
     public function like(Post $post): Response
     {
-        $post->setLike($post->getLike() + 1);
-
         $em = $this->getDoctrine()->getManager();
-        $em->persist($post);
+        $likes = $post->getLikes();
+
+        if ($likes->isEmpty()) {
+            $like = new Like();
+            $like->setUser($this->getUser());
+            $post->addLike($like);
+
+            $em->persist($post);
+        } else {
+            $isDeleted = false;
+            foreach ($likes as $like) {
+                if ($like->getUser() === $this->getUser()) {
+                    $post->removeLike($like);
+                    $em->persist($post);
+
+                    $isDeleted = true;
+                }
+            }
+
+            if (!$isDeleted) {
+                $like = new Like();
+                $like->setUser($this->getUser());
+                $post->addLike($like);
+
+                $em->persist($post);
+            }
+        }
+
         $em->flush();
 
         return $this->redirectToRoute('post_show', ['slug' => $post->getSlug()]);

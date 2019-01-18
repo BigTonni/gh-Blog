@@ -30,7 +30,7 @@
                                 <li><i class="icon-edit"></i><a href="{{ path('post_edit', {'slug': post.slug}) }}">{{ 'post.edit' |trans }}</a></li>
                                 <li><i class="icon-remove"></i><a href="{{ path('post_delete', {'slug': post.slug}) }}" onclick="return confirm('{{ 'post.delete_confirm' |trans }}')">{{ 'post.delete' |trans }}</a></li>
                             {% endif %}
-                            <li><a href="{{ path('post_like', {'slug': post.slug}) }}"><i class="icon-heart"></i>{{ post.like }}</a></li>
+                            <li><a href="{{ path('post_like', {'slug': post.slug}) }}"><i class="icon-heart"></i> {{ countLike.countLike }} </a></li>
                             <li><i class="icon-calendar"></i>{{ post.createdAt | date('Y-m-d') }}</li>
                             <li><i class="icon-user"></i> <a href="{{ path('author_posts_show', {'slug': post.author.slug}) }}">{{ post.author.fullname | title }}</a></li>
                             <li><i class="icon-comment"></i>{{ 'post.comment_count' |transchoice(countComment.commentCount) }}</li>

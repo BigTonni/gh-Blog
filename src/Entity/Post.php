@@ -90,12 +90,6 @@ class Post
     private $author;
 
     /**
-     * @ORM\Column(type="integer", name="i_like", nullable=true)
-     * @Assert\Type(type="integer")
-     */
-    private $like;
-
-    /**
      * @var Tag[]|ArrayCollection
      *
      * @ORM\ManyToMany(targetEntity="App\Entity\Tag", cascade={"persist"})
@@ -105,6 +99,12 @@ class Post
     private $tags;
 
     /**
+     * @ORM\OneToMany(targetEntity="Like", mappedBy="post", orphanRemoval=true, cascade={"persist"})
+     * @Assert\NotNull()
+     */
+    private $likes;
+
+    /**
      * Post constructor.
      */
     public function __construct()
@@ -112,6 +112,7 @@ class Post
         $this->isPublished = true;
         $this->comments = new ArrayCollection();
         $this->tags = new ArrayCollection();
+        $this->likes = new ArrayCollection();
     }
 
     /**
@@ -205,7 +206,7 @@ class Post
     /**
      * @return bool
      */
-    public function getisPublished(): bool
+    public function getIsPublished(): bool
     {
         return $this->isPublished;
     }
@@ -315,26 +316,6 @@ class Post
     }
 
     /**
-     * @return mixed
-     */
-    public function getLike()
-    {
-        return $this->like;
-    }
-
-    /**
-     * @param $like
-     *
-     * @return Post
-     */
-    public function setLike($like): self
-    {
-        $this->like = $like;
-
-        return $this;
-    }
-
-    /**
      * @param Tag|null ...$tags
      */
     public function addTag(?Tag ...$tags): void
@@ -360,5 +341,37 @@ class Post
     public function getTags(): Collection
     {
         return $this->tags;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getLikes(): Collection
+    {
+        return $this->likes;
+    }
+
+    /**
+     * @param Like|null $like
+     */
+    public function addLike(?Like $like): void
+    {
+        $like->setPost($this);
+        if (!$this->likes->contains($like)) {
+            $this->likes->add($like);
+        }
+    }
+
+    /**
+     * @param Like $like
+     *
+     * @return Post
+     */
+    public function removeLike(?Like $like): self
+    {
+        $like->setPost(null);
+        $this->likes->removeElement($like);
+
+        return $this;
     }
 }
