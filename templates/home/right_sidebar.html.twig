@@ -32,11 +32,11 @@
 
                             {% if isSubscriber == true %}
                                 <a href="{{ path('category_unsubscribe', {'slug': category.slug}) }}">
-                                 <small>Unsubscribe</small>
+                                 <small>{{ 'content.unsubscribe' | trans }}</small>
                                 </a>
                             {% else %}
                                 <a href="{{ path('category_subscribe', {'slug': category.slug}) }}">
-                                    <small>Subscribe</small>
+                                    <small>{{ 'content.subscribe' | trans }}</small>
                                 </a>
                             {% endif %}
 

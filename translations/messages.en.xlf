@@ -61,6 +61,14 @@
             <source>content.homepage_title</source>
             <target>Homepage</target>
         </trans-unit>
+        <trans-unit id="content.subscribe" resname="content.subscribe">
+            <source>content.subscribe</source>
+            <target>Subscribe</target>
+        </trans-unit>
+        <trans-unit id="content.unsubscribe" resname="content.unsubscribe">
+            <source>content.unsubscribe</source>
+            <target>Unsubscribe</target>
+        </trans-unit>
         <!--Content END-->
 
         <!--Post-->
@@ -242,6 +250,15 @@
         <trans-unit id="exception.search_query_not_result" resname="exception.search_query_not_result">
             <source>exception.search_query_not_result</source>
             <target>Nothing found for this request</target>
+        </trans-unit>
+        <!--Exception END-->
+
+        <!--Messages-->
+        <trans-unit id="messages.new_notifications" resname="messages.new_notifications">
+            <source>messages.new_notifications</source>
+            <target>In the categories to which you subscribed, 1 new post appeared |
+                    In the categories to which you are subscribed, %count% new posts appear
+            </target>
         </trans-unit>
         <!--Exception END-->
 
