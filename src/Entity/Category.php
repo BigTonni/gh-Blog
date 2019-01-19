@@ -44,11 +44,17 @@ class Category
     private $slug;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Subscription", mappedBy="category", orphanRemoval=true)
+     */
+    private $subscribers;
+
+    /**
      * Category constructor.
      */
     public function __construct()
     {
         $this->posts = new ArrayCollection();
+        $this->subscribers = new ArrayCollection();
     }
 
     /**
@@ -115,6 +121,45 @@ class Category
     public function setSlug($slug): self
     {
         $this->slug = $slug;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getSubscriber(): Collection
+    {
+        return $this->subscribers;
+    }
+
+    /**
+     * @param Subscription $subscribers
+     * @return Category
+     */
+    public function addSubscriber(Subscription $subscribers): self
+    {
+        if (!$this->subscribers->contains($subscribers)) {
+            $this->subscribers[] = $subscribers;
+            $subscribers->setCategory($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Subscription $subscribers
+     * @return Category
+     */
+    public function removeSubscriber(Subscription $subscribers): self
+    {
+        if ($this->subscribers->contains($subscribers)) {
+            $this->subscribers->removeElement($subscribers);
+            // set the owning side to null (unless already changed)
+            if ($subscribers->getCategory() === $this) {
+                $subscribers->setCategory(null);
+            }
+        }
 
         return $this;
     }

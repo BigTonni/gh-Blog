@@ -51,7 +51,7 @@ class MenuBuilder
                     'class' => 'nav-item', ]
             );
 
-        if (!$this->checker->isGranted('IS_AUTHENTICATED_FULLY')) {
+        if (!$this->checker->isGranted('ROLE_USER')) {
             $menu->addChild('menu.login', ['route' => 'app_login'])
                 ->setAttributes([
                         'class' => 'nav-item', ]

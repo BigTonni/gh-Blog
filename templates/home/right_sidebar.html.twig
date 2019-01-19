@@ -18,6 +18,7 @@
                 {% for category in categories %}
                     <li><a href="{{ path('posts_in_category_show', {'slug': category.slug}) }}"><i
                                     class="icon-plus-sign"></i>{{ category.name }}</a></li>
+                    <li><a href="{{ path('category_subscribe', {'slug': category.slug}) }}"> Subscribe </a> </li>
                 {% endfor %}
             {% endif %}
         </ul>

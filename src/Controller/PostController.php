@@ -3,7 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Like;
+use App\Entity\Notification;
 use App\Entity\Tag;
+use App\Event\PostPublishedEvent;
+use App\Event\PostViewedEvent;
 use App\Form\PostType;
 use App\Entity\User;
 use App\Entity\Category;
@@ -12,6 +15,7 @@ use App\Entity\Post;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -63,16 +67,16 @@ class PostController extends AbstractController
     }
 
     /**
-     * @param Post        $post
-     * @param Breadcrumbs $breadcrumbs
+     * @param Post                     $post
+     * @param Breadcrumbs              $breadcrumbs
+     * @param EventDispatcherInterface $eventDispatcher
      *
      * @return Response
      *
      * @throws \Doctrine\ORM\NonUniqueResultException
-     *
      * @Route("/{_locale}/post/show/{slug}", defaults={"_locale": "en"}, name="post_show")
      */
-    public function show(Post $post, Breadcrumbs $breadcrumbs): Response
+    public function show(Post $post, Breadcrumbs $breadcrumbs, EventDispatcherInterface $eventDispatcher): Response
     {
         $em = $this->getDoctrine()->getManager();
         $countComment = $em->getRepository(Comment::class)->getCountCommentForPost($post->getId());
@@ -85,6 +89,8 @@ class PostController extends AbstractController
         $breadcrumbs->addRouteItem($post->getTitle(), 'post_show', [
             'slug' => $post->getSlug(),
         ]);
+
+        $eventDispatcher->dispatch(PostViewedEvent::NAME, new PostViewedEvent($post));
 
         return $this->render('post/show.html.twig', [
             'post' => $post,
@@ -198,14 +204,45 @@ class PostController extends AbstractController
     }
 
     /**
-     * @param Request $request
+     * @param Request            $request
+     * @param PaginatorInterface $paginator
+     *
+     * @return Response
+     *
+     * @Route("/{_locale}/subscriptions/post", defaults={"_locale": "en"}, name="posts_in_subscribed_categories")
+     */
+    public function showNewPostsInSubscribedCategories(Request $request, PaginatorInterface $paginator): Response
+    {
+        $em = $this->getDoctrine()->getManager();
+        $query = $em->getRepository(Notification::class)->findBy([
+            'user' => $this->getUser(),
+            'isRead' => false,
+        ]);
+
+        $allPosts = [];
+
+        foreach ($query as $post) {
+            $allPosts[] = $post->getPost();
+        }
+
+        $posts = $paginator->paginate($allPosts, $request->query->getInt('page', 1), Post::NUM_ITEMS);
+
+        return $this->render('home/content.twig', [
+            'title' => $this->translator->trans('post.posts_with_tag_title'),
+            'posts' => $posts,
+        ]);
+    }
+
+    /**
+     * @param Request                  $request
+     * @param EventDispatcherInterface $eventDispatcher
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      *
      * @IsGranted("ROLE_ADMIN")
      * @Route("/{_locale}/post/new", defaults={"_locale": "en"}, name="post_new")
      */
-    public function new(Request $request): Response
+    public function new(Request $request, EventDispatcherInterface $eventDispatcher): Response
     {
         $post = new Post();
         $post->setAuthor($this->getUser());
@@ -220,6 +257,8 @@ class PostController extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $em->persist($post);
             $em->flush();
+
+            $eventDispatcher->dispatch(PostPublishedEvent::NAME, new PostPublishedEvent($post));
 
             return $this->redirectToRoute('post_show', ['slug' => $post->getSlug()]);
         }

@@ -1,0 +1,4 @@
+{% if notification %}
+    In the categories for which you subscribed, new posts appeared
+    <a href="{{ path('posts_in_subscribed_categories') }}"> {{ notification | length }} </a>
+{% endif %}
