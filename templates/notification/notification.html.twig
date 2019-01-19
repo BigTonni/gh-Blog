@@ -1,0 +1,3 @@
+{% if notification %}
+    <a href="{{ path('posts_in_subscribed_categories') }}"> {{ 'messages.new_notifications' | transchoice(notification | length ) }} </a>
+{% endif %}
