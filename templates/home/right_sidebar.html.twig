@@ -16,9 +16,33 @@
         <ul class="post-category-list">
             {% if categories %}
                 {% for category in categories %}
-                    <li><a href="{{ path('posts_in_category_show', {'slug': category.slug}) }}"><i
-                                    class="icon-plus-sign"></i>{{ category.name }}</a></li>
-                    <li><a href="{{ path('category_subscribe', {'slug': category.slug}) }}"> Subscribe </a> </li>
+                    <li>
+                        <a href="{{ path('posts_in_category_show', {'slug': category.slug}) }}">
+                            <i class="icon-plus-sign"></i>{{ category.name }}
+                        </a>
+
+                        {% if is_granted('ROLE_USER') %}
+                            <span> | </span>
+                            {% set isSubscriber = false %}
+                            {% for subscriber in category.subscriber.values %}
+                                {% if  subscriber.user == app.user%}
+                                    {% set isSubscriber = true %}
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if isSubscriber == true %}
+                                <a href="{{ path('category_unsubscribe', {'slug': category.slug}) }}">
+                                 <small>Unsubscribe</small>
+                                </a>
+                            {% else %}
+                                <a href="{{ path('category_subscribe', {'slug': category.slug}) }}">
+                                    <small>Subscribe</small>
+                                </a>
+                            {% endif %}
+
+                        {% endif %}
+
+                    </li>
                 {% endfor %}
             {% endif %}
         </ul>

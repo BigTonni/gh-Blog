@@ -47,6 +47,34 @@ class SubscriptionController extends AbstractController
     }
 
     /**
+     * @param Category $category
+     *
+     * @return Response
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @IsGranted("ROLE_USER")
+     * @Route("/{_locale}/category/unsubscribe/{slug}", defaults={"_locale": "en"}, name="category_unsubscribe")
+     */
+    public function unsubscribe(Category $category): Response
+    {
+        $em = $this->getDoctrine()->getManager();
+        $existSubscription = $em->getRepository(Subscription::class)->findBy(
+            [
+                'user' => $this->getUser(),
+                'category' => $category,
+            ]
+        );
+
+        if ($existSubscription) {
+            $em->getRepository(Subscription::class)->deleteByCatagoryAndUser($category, $this->getUser());
+        }
+
+        $em->flush();
+
+        return $this->redirectToRoute('posts_in_category_show', ['slug' => $category->getSlug()]);
+    }
+
+    /**
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function notification(): Response
