@@ -261,6 +261,10 @@
                         В категориях, на которые вы подписаны, появилось %count% новых постов
                 </target>
             </trans-unit>
+            <trans-unit id="messages.number_posts_per_page" resname="messages.number_posts_per_page">
+                <source>messages.number_posts_per_page</source>
+                <target>Количество постов на странице</target>
+            </trans-unit>
             <!--Exception END-->
 
         </body>

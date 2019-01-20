@@ -62,7 +62,7 @@
 
        {% if app.request.attributes.get('_route') != 'home' and app.request.attributes.get('_route') != 'post_search' %}
         <div class="pagination pagination-right" style="padding-bottom: 30px; margin-top: -60px">
-            <h6 class="title">{{ 'Количество постов на странице' }}</h6>
+            <h6 class="title">{{ 'messages.number_posts_per_page' | trans }}</h6>
             <ul class="post-category-list">
                 <li>
                     <a href="{{ path(app.request.attributes.get('_route'), {'slug' : app.request.attributes.get('slug'), 'maxItemPerPage': '5'})  }}">5</a>
@@ -80,7 +80,7 @@
         </div>
        {% elseif  app.request.attributes.get('_route') == 'post_search' %}
            <div class="pagination pagination-right" style="padding-bottom: 30px; margin-top: -60px">
-               <h6 class="title">{{ 'Количество постов на странице' }}</h6>
+               <h6 class="title">{{ 'messages.number_posts_per_page' | trans }}</h6>
                <ul class="post-category-list">
                    <li>
                        <a href="{{ path(app.request.attributes.get('_route'), {'maxItemPerPage': '5', 'q': app.request.query.get('q')})  }}">5</a>
