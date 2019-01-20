@@ -59,11 +59,50 @@
         <div class="pagination">
             {{ knp_pagination_render(posts) }}
         </div>
+
+       {% if app.request.attributes.get('_route') != 'home' and app.request.attributes.get('_route') != 'post_search' %}
+        <div class="pagination pagination-right" style="padding-bottom: 30px; margin-top: -60px">
+            <h6 class="title">{{ 'Количество постов на странице' }}</h6>
+            <ul class="post-category-list">
+                <li>
+                    <a href="{{ path(app.request.attributes.get('_route'), {'slug' : app.request.attributes.get('slug'), 'maxItemPerPage': '5'})  }}">5</a>
+                </li>
+                <li>
+                    <a href="{{ path(app.request.attributes.get('_route'), {'slug' : app.request.attributes.get('slug'), 'maxItemPerPage': '10'})  }}">10</a>
+                </li>
+                <li>
+                    <a href="{{ path(app.request.attributes.get('_route'), {'slug' : app.request.attributes.get('slug'), 'maxItemPerPage': '20'})  }}">20</a>
+                </li>
+                <li>
+                    <a href="{{ path(app.request.attributes.get('_route'), {'slug' : app.request.attributes.get('slug'), 'maxItemPerPage': '50'})  }}">50</a>
+                </li>
+            </ul>
+        </div>
+       {% elseif  app.request.attributes.get('_route') == 'post_search' %}
+           <div class="pagination pagination-right" style="padding-bottom: 30px; margin-top: -60px">
+               <h6 class="title">{{ 'Количество постов на странице' }}</h6>
+               <ul class="post-category-list">
+                   <li>
+                       <a href="{{ path(app.request.attributes.get('_route'), {'maxItemPerPage': '5', 'q': app.request.query.get('q')})  }}">5</a>
+                   </li>
+                   <li>
+                       <a href="{{ path(app.request.attributes.get('_route'), {'maxItemPerPage': '10', 'q': app.request.query.get('q')})  }}">10</a>
+                   </li>
+                   <li>
+                       <a href="{{ path(app.request.attributes.get('_route'), {'maxItemPerPage': '20', 'q': app.request.query.get('q')})  }}">20</a>
+                   </li>
+                   <li>
+                       <a href="{{ path(app.request.attributes.get('_route'), {'maxItemPerPage': '50', 'q': app.request.query.get('q')})  }}">50</a>
+                   </li>
+               </ul>
+           </div>
+       {% endif %}
+
+
     </div>
 
     {% block right_sidebar %}
         {{ render(controller('App\\Controller\\HomeController::rightSidebar')) }}
     {% endblock %}
-
 
 {% endblock %}

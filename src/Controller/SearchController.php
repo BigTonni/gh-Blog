@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Post;
 use App\Repository\PostRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -35,12 +34,14 @@ class SearchController extends AbstractController
      * @param Request            $request
      * @param PostRepository     $postRepository
      * @param PaginatorInterface $paginator
+     * @param $maxItemPerPage
      *
      * @return Response
      *
-     * @Route("/{_locale}/post/search", defaults={"_locale": "en"}, methods={"GET"}, name="post_search")
+     * @Route("/{_locale}/post/search/{maxItemPerPage}/", defaults={"_locale": "en", "maxItemPerPage" : "10"},
+     *        requirements={"maxItemPerPage"="\d+"}, methods={"GET"}, name="post_search")
      */
-    public function search(Request $request, PostRepository $postRepository, PaginatorInterface $paginator): Response
+    public function search(Request $request, PostRepository $postRepository, PaginatorInterface $paginator, $maxItemPerPage): Response
     {
         $query = $postRepository->findBySearchQuery($request->query->get('q', ''),
             $request->query->get('l', 10));
@@ -49,9 +50,9 @@ class SearchController extends AbstractController
             throw $this->createNotFoundException($this->translator->trans('exception.search_query_not_result'));
         }
 
-        $posts = $paginator->paginate($query, $request->query->getInt('page', 1), Post::NUM_ITEMS);
+        $posts = $paginator->paginate($query, $request->query->getInt('page', 1), $maxItemPerPage);
 
-        return $this->render('post/search.html.twig', [
+        return $this->render('home/content.twig', [
             'posts' => $posts,
             'title' => $this->translator->trans('search.search_title').' '.$request->query->get('q'),
         ]);
