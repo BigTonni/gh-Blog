@@ -260,6 +260,10 @@
                     In the categories to which you are subscribed, %count% new posts appear
             </target>
         </trans-unit>
+        <trans-unit id="messages.number_posts_per_page" resname="messages.number_posts_per_page">
+            <source>messages.number_posts_per_page</source>
+            <target>Number of posts per page</target>
+        </trans-unit>
         <!--Exception END-->
 
     </body>
