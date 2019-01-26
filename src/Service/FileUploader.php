@@ -21,7 +21,7 @@ class FileUploader
         try {
             $file->move($this->getTargetDirectory(), $fileName);
         } catch (FileException $e) {
-            throw new FileException('error move '.$fileName.' to '.$this->getTargetDirectory());
+            throw new FileException('errorgit st move '.$fileName.' to '.$this->getTargetDirectory());
         }
 
         return $fileName;
