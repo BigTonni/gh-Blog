@@ -12,10 +12,12 @@ use App\Entity\User;
 use App\Entity\Category;
 use App\Entity\Comment;
 use App\Entity\Post;
+use App\Service\FileUploader;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -45,16 +47,21 @@ class PostController extends AbstractController
     /**
      * @param Request            $request
      * @param PaginatorInterface $paginator
+     * @param int                $maxItemPerPage
      *
      * @return Response
      *
-     * @Route("/{_locale}/post/all", defaults={"_locale": "en"}, name="posts_all_show")
+     * @Route("/{_locale}/post/all/{maxItemPerPage}", defaults={"_locale": "en", "maxItemPerPage" : "10"},
+     *        requirements={"maxItemPerPage"="\d+"}, name="posts_all_show")
      */
-    public function showAll(Request $request, PaginatorInterface $paginator): Response
+    public function showAll(Request $request, PaginatorInterface $paginator, $maxItemPerPage): Response
     {
         $em = $this->getDoctrine()->getManager();
-        $postsQuery = $em->getRepository(Post::class)->createQueryBuilder('p')->getQuery();
-        $posts = $paginator->paginate($postsQuery, $request->query->getInt('page', 1), Post::NUM_ITEMS);
+        $postsQuery = $em->getRepository(Post::class)
+            ->createQueryBuilder('p')
+            ->addOrderBy('p.createdAt', 'DESC')
+            ->getQuery();
+        $posts = $paginator->paginate($postsQuery, $request->query->getInt('page', 1), $maxItemPerPage);
 
         if (!$postsQuery) {
             throw $this->createNotFoundException($this->translator->trans('exception.no_posts'));
@@ -104,12 +111,14 @@ class PostController extends AbstractController
      * @param Request            $request
      * @param PaginatorInterface $paginator
      * @param Category           $category
+     * @param $maxItemPerPage
      *
      * @return Response
      *
-     * @Route("/{_locale}/category/{slug}", defaults={"_locale": "en"}, name="posts_in_category_show")
+     * @Route("/{_locale}/category/{slug}/{maxItemPerPage}", defaults={"_locale": "en", "maxItemPerPage" : "10"},
+     *        requirements={"maxItemPerPage"="\d+"}, name="posts_in_category_show")
      */
-    public function showPostsInCategory(Request $request, PaginatorInterface $paginator, Category $category): Response
+    public function showPostsInCategory(Request $request, PaginatorInterface $paginator, Category $category, $maxItemPerPage): Response
     {
         $em = $this->getDoctrine()->getManager();
         $query = $em->getRepository(Post::class)->findPostsByCategoryId($category->getId());
@@ -118,7 +127,7 @@ class PostController extends AbstractController
             throw $this->createNotFoundException($this->translator->trans('exception.no_posts_in_category'));
         }
 
-        $posts = $paginator->paginate($query, $request->query->getInt('page', 1), Post::NUM_ITEMS);
+        $posts = $paginator->paginate($query, $request->query->getInt('page', 1), $maxItemPerPage);
 
         return $this->render('home/content.twig', [
             'title' => $this->translator->trans('post.posts_in_category_title').' '.$category->getName(),
@@ -130,12 +139,14 @@ class PostController extends AbstractController
      * @param Request            $request
      * @param PaginatorInterface $paginator
      * @param User               $user
+     * @param $maxItemPerPage
      *
      * @return Response
      *
-     * @Route("/{_locale}/author/{slug}", defaults={"_locale": "en"}, name="author_posts_show")
+     * @Route("/{_locale}/author/{slug}/{maxItemPerPage}", defaults={"_locale": "en", "maxItemPerPage" : "10"},
+     *        requirements={"maxItemPerPage"="\d+"}, name="author_posts_show")
      */
-    public function showAuthorPosts(Request $request, PaginatorInterface $paginator, User $user): Response
+    public function showAuthorPosts(Request $request, PaginatorInterface $paginator, User $user, $maxItemPerPage): Response
     {
         $em = $this->getDoctrine()->getManager();
         $query = $em->getRepository(Post::class)->findPostsByAuthorId($user->getId());
@@ -144,7 +155,7 @@ class PostController extends AbstractController
             throw $this->createNotFoundException($this->translator->trans('exception.author_no_posts'));
         }
 
-        $posts = $paginator->paginate($query, $request->query->getInt('page', 1), Post::NUM_ITEMS);
+        $posts = $paginator->paginate($query, $request->query->getInt('page', 1), $maxItemPerPage);
 
         return $this->render('home/content.twig', [
             'title' => $this->translator->trans('post.author_posts_title').' '.$user->getFullName(),
@@ -155,12 +166,14 @@ class PostController extends AbstractController
     /**
      * @param Request            $request
      * @param PaginatorInterface $paginator
+     * @param $maxItemPerPage
      *
      * @return Response
      *
-     * @Route("/{_locale}/post/my", defaults={"_locale": "en"}, name="show_my_posts")
+     * @Route("/{_locale}/post/my/{maxItemPerPage}", defaults={"_locale": "en", "maxItemPerPage" : "10"},
+     *        requirements={"maxItemPerPage"="\d+"}, name="show_my_posts")
      */
-    public function showMyPosts(Request $request, PaginatorInterface $paginator): Response
+    public function showMyPosts(Request $request, PaginatorInterface $paginator, $maxItemPerPage): Response
     {
         $em = $this->getDoctrine()->getManager();
         $query = $em->getRepository(Post::class)->findPostsByAuthorId($this->getUser()->getId());
@@ -169,7 +182,7 @@ class PostController extends AbstractController
             throw $this->createNotFoundException($this->translator->trans('exception.you_no_posts'));
         }
 
-        $posts = $paginator->paginate($query, $request->query->getInt('page', 1), Post::NUM_ITEMS);
+        $posts = $paginator->paginate($query, $request->query->getInt('page', 1), $maxItemPerPage);
 
         return $this->render('home/content.twig', [
             'title' => $this->translator->trans('post.author_posts_title').' '.$this->getUser()->getFullName(),
@@ -181,12 +194,14 @@ class PostController extends AbstractController
      * @param Request            $request
      * @param PaginatorInterface $paginator
      * @param Tag                $tag
+     * @param $maxItemPerPage
      *
      * @return Response
      *
-     * @Route("/{_locale}/tag/{slug}", defaults={"_locale": "en"}, name="posts_with_tag_show")
+     * @Route("/{_locale}/tag/{slug}/{maxItemPerPage}", defaults={"_locale": "en", "maxItemPerPage" : "10"},
+     *        requirements={"maxItemPerPage"="\d+"}, name="posts_with_tag_show")
      */
-    public function showPostsWithTag(Request $request, PaginatorInterface $paginator, Tag $tag): Response
+    public function showPostsWithTag(Request $request, PaginatorInterface $paginator, Tag $tag, $maxItemPerPage): Response
     {
         $em = $this->getDoctrine()->getManager();
         $query = $em->getRepository(Post::class)->findPostsByTagId($tag->getId());
@@ -195,7 +210,7 @@ class PostController extends AbstractController
             throw $this->createNotFoundException($this->translator->trans('exception.no_posts_with_tag'));
         }
 
-        $posts = $paginator->paginate($query, $request->query->getInt('page', 1), Post::NUM_ITEMS);
+        $posts = $paginator->paginate($query, $request->query->getInt('page', 1), $maxItemPerPage);
 
         return $this->render('home/content.twig', [
             'title' => $this->translator->trans('post.posts_with_tag_title').' '.$tag->getName(),
@@ -206,12 +221,14 @@ class PostController extends AbstractController
     /**
      * @param Request            $request
      * @param PaginatorInterface $paginator
+     * @param $maxItemPerPage
      *
      * @return Response
      *
-     * @Route("/{_locale}/subscriptions/post", defaults={"_locale": "en"}, name="posts_in_subscribed_categories")
+     * @Route("/{_locale}/subscriptions/post/{maxItemPerPage}", defaults={"_locale": "en", "maxItemPerPage" : "10"},
+     *        requirements={"maxItemPerPage"="\d+"}, name="posts_in_subscribed_categories")
      */
-    public function showNewPostsInSubscribedCategories(Request $request, PaginatorInterface $paginator): Response
+    public function showNewPostsInSubscribedCategories(Request $request, PaginatorInterface $paginator, $maxItemPerPage): Response
     {
         $em = $this->getDoctrine()->getManager();
         $query = $em->getRepository(Notification::class)->findBy([
@@ -225,7 +242,7 @@ class PostController extends AbstractController
             $allPosts[] = $post->getPost();
         }
 
-        $posts = $paginator->paginate($allPosts, $request->query->getInt('page', 1), Post::NUM_ITEMS);
+        $posts = $paginator->paginate($allPosts, $request->query->getInt('page', 1), $maxItemPerPage);
 
         return $this->render('home/content.twig', [
             'title' => $this->translator->trans('post.posts_with_tag_title'),
@@ -283,6 +300,10 @@ class PostController extends AbstractController
         if (!$this->checkUser($post)) {
             return $this->redirectToRoute('home');
         }
+
+        $post->setImage(
+            new File($this->getParameter('images_directory').'/'.$post->getImage())
+        );
 
         $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);

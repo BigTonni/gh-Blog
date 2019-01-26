@@ -105,6 +105,11 @@ class Post
     private $likes;
 
     /**
+     * @ORM\Column(type="string")
+     */
+    private $image;
+
+    /**
      * Post constructor.
      */
     public function __construct()
@@ -371,6 +376,25 @@ class Post
     {
         $like->setPost(null);
         $this->likes->removeElement($like);
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    /**
+     * @param mixed $image
+     * @return Post
+     */
+    public function setImage($image): self
+    {
+        $this->image = $image;
 
         return $this;
     }

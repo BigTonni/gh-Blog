@@ -16,11 +16,11 @@
             <article>
                 <h3 class="title-bg">{{ post.title | title }}</h3>
                 <div class="post-content">
-                    <a href="#"><img src="{{ asset('src/img/gallery/post-img-2.jpg') }}" alt="Post Thumb"></a>
+                    <a href="#"><img src="{{ asset('uploads/images/') ~ post.image }}" alt="Post Thumb"></a>
 
                     <div class="post-body">
                         <p>
-                            {{ post.content | raw}}
+                            {{ post.content | raw }}
                         </p>
                     </div>
 
