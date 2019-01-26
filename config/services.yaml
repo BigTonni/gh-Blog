@@ -5,6 +5,7 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: 'en'
+    images_directory: '%kernel.project_dir%/public/uploads/images'
 
 services:
     # default configuration for services in *this* file
@@ -61,3 +62,12 @@ services:
         arguments: [~, App\Entity\Tag, ~]
         tags:
             - { name: sonata.admin, manager_type: orm, label: admin.tags }
+
+    App\Event\ImageUploadListener:
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+            - { name: doctrine.event_listener, event: preUpdate }
+
+    App\Service\FileUploader:
+        arguments:
+            $targetDirectory: '%images_directory%'

@@ -24,11 +24,10 @@
                     <h3 class="title-bg"><a
                                 href="{{ path('post_show', {'slug': post.slug}) }}"> {{ post.title | title }} </a></h3>
                     <div class="post-summary">
-                        <a href="{{ path('post_show', {'slug': post.slug}) }}"><img
-                                    src="{{ asset('src/img/gallery/post-img-2.jpg') }}" alt="Post Thumb"></a>
+                        <a href="{{ path('post_show', {'slug': post.slug}) }}"><img class="img-fluid"
+                                    src="{{ asset('uploads/images/') ~ post.image }}" alt="Post Thumb"></a>
                         <p>
-                            {% set postContent = post.content %}
-                            {{ post.content | length > 450 ? post.content | slice(0, 450) ~ '...' : post.content }}
+                            {{ post.content | length > 450 ? post.content|striptags|slice(0, 450) ~ '...' : post.content|striptags  }}
                         </p>
                         <div class="post-summary-footer">
                             <button class="btn btn-small btn-inverse" type="button"

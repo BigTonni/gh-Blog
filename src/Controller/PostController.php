@@ -12,10 +12,12 @@ use App\Entity\User;
 use App\Entity\Category;
 use App\Entity\Comment;
 use App\Entity\Post;
+use App\Service\FileUploader;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -298,6 +300,10 @@ class PostController extends AbstractController
         if (!$this->checkUser($post)) {
             return $this->redirectToRoute('home');
         }
+
+        $post->setImage(
+            new File($this->getParameter('images_directory').'/'.$post->getImage())
+        );
 
         $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
